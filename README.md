@@ -24,7 +24,7 @@ return [
 ```
 
 `config/services.yaml` içerisinde, services altına alağıdaki şekilde PosService parametresini ekleyin:
-```bash
+```yaml
 services:
     // ...
 
