@@ -23,6 +23,17 @@ return [
 ];
 ```
 
+`config/services.yaml` içerisinde, services altına alağıdaki şekilde PosService parametresini ekleyin:
+```bash
+services:
+    // ...
+
+    # pos service
+    Mews\PosBundle\DependencyInjection\PosService:
+        arguments: ['@parameter_bag']
+
+```
+
 Aşağıdaki komutla ayarların bulunduğu yaml dosyasını proje ayar dizinine kopyalayın:
 ```bash
 cp vendor/mews/pos-bundle/Resources/config/packages/pos.yaml config/packages/
