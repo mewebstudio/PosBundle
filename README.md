@@ -4,7 +4,7 @@
 [Pos](https://github.com/mewebstudio/pos)
 
 ### Minimum Gereksinimler
-  - PHP >= 7.2
+  - PHP >= 7.1.3
   - ext-dom
   - ext-json
   - ext-SimpleXML
