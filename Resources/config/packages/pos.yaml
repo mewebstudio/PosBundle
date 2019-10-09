@@ -8,7 +8,7 @@ pos:
         RUB: 643
     banks:
         akbank:
-            name: Akbank A.Ş.
+            name: Akbank
             class: Mews\Pos\EstPos
             urls:
                 production: https://www.sanalakpos.com/fim/api
@@ -24,6 +24,24 @@ pos:
                 test: https://entegrasyon.asseco-see.com.tr/fim/api
                 gateway:
                     production: https://sanalpos2.ziraatbank.com.tr/fim/est3dgate
+                    test: https://entegrasyon.asseco-see.com.tr/fim/est3Dgate
+        finansbank:
+            name: QNB Finansbank
+            class: Mews\Pos\EstPos
+            urls:
+                production: https://www.fbwebpos.com/fim/api
+                test: https://entegrasyon.asseco-see.com.tr/fim/api
+                gateway:
+                    production: https://www.fbwebpos.com/fim/est3dgate
+                    test: https://entegrasyon.asseco-see.com.tr/fim/est3Dgate
+        halkbank:
+            name: Halkbank
+            class: Mews\Pos\EstPos
+            urls:
+                production: https://sanalpos.halkbank.com.tr/fim/api
+                test: https://entegrasyon.asseco-see.com.tr/fim/api
+                gateway:
+                    production: https://sanalpos.halkbank.com.tr/fim/est3dgate
                     test: https://entegrasyon.asseco-see.com.tr/fim/est3Dgate
         isbank:
             name: İşbank
