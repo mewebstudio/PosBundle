@@ -83,6 +83,7 @@ mews_pos:
     estpos_payten:
       gateway_class: Mews\Pos\Gateways\EstV3Pos
       lang: !php/const Mews\Pos\PosInterface::LANG_TR #optional
+      test_mode: true # optional
       credentials:
         payment_model: !php/const Mews\Pos\PosInterface::MODEL_3D_SECURE
         merchant_id: 700XXXXXXX
@@ -93,7 +94,6 @@ mews_pos:
         payment_api: 'https://entegrasyon.asseco-see.com.tr/fim/api'
         gateway_3d: 'https://entegrasyon.asseco-see.com.tr/fim/est3Dgate'
         gateway_3d_host: 'https://sanalpos.sanalakpos.com.tr/fim/est3Dgate'
-      test_mode: true
     yapikredi:
       gateway_class: Mews\Pos\Gateways\PosNet
       credentials:
@@ -105,7 +105,6 @@ mews_pos:
       gateway_endpoints:
         payment_api: 'https://setmpos.ykb.com/PosnetWebService/XML'
         gateway_3d: 'https://setmpos.ykb.com/3DSWebService/YKBPaymentService'
-      test_mode: true
     albaraka:
       gateway_class: Mews\Pos\Gateways\PosNetV1Pos
       credentials:
@@ -115,9 +114,8 @@ mews_pos:
         user_name: 10100628XXXXXXX # 16 haneli üye işyeri EPOS numarası.
         enc_key: 10,43,43,45,65,56,76,08 # Şifreleme anahtar
       gateway_endpoints:
-        payment_api: 'https://setmpos.ykb.com/PosnetWebService/XML'
-        gateway_3d: 'https://setmpos.ykb.com/3DSWebService/YKBPaymentService'
-      test_mode: true
+        payment_api: 'https://epostest.albarakaturk.com.tr/ALBMerchantService/MerchantJSONAPI.svc'
+        gateway_3d: 'https://epostest.albarakaturk.com.tr/ALBSecurePaymentUI/SecureProcess/SecureVerification.aspx'
     payfor_finansbank:
       gateway_class: Mews\Pos\Gateways\PayForPos
       credentials:
@@ -130,7 +128,6 @@ mews_pos:
         payment_api: 'https://vpostest.qnbfinansbank.com/Gateway/XMLGate.aspx'
         gateway_3d: 'https://vpostest.qnbfinansbank.com/Gateway/Default.aspx'
         gateway_3d_host: 'https://vpostest.qnbfinansbank.com/Gateway/3DHost.aspx'
-      test_mode: true
     garanti:
       gateway_class: Mews\Pos\Gateways\GarantiPos
       credentials:
@@ -145,12 +142,10 @@ mews_pos:
       gateway_endpoints:
         payment_api: 'https://sanalposprovtest.garantibbva.com.tr/VPServlet'
         gateway_3d: 'https://sanalposprovtest.garantibbva.com.tr/servlet/gt3dengine'
-      test_mode: true
     interpos_denizbank:
       gateway_class: Mews\Pos\Gateways\InterPos
       credentials:
-        #payment_model: !php/const Mews\Pos\PosInterface::MODEL_3D_SECURE
-        payment_model: !php/const Mews\Pos\PosInterface::MODEL_3D_HOST
+        payment_model: !php/const Mews\Pos\PosInterface::MODEL_3D_SECURE
         merchant_id: InterXXXXXXXX # ShopCode
         user_name: 31XXXXXXXX # UserCode
         user_password: 3XXXXXXXX  # UserPass
@@ -159,7 +154,6 @@ mews_pos:
         payment_api: 'https://test.inter-vpos.com.tr/mpi/Default.aspx'
         gateway_3d: 'https://test.inter-vpos.com.tr/mpi/Default.aspx'
         gateway_3d_host: 'https://test.inter-vpos.com.tr/mpi/3DHost.aspx'
-      test_mode: true
     kuveytpos:
       gateway_class: Mews\Pos\Gateways\KuveytPos
       credentials:
@@ -172,7 +166,6 @@ mews_pos:
         payment_api: 'https://boatest.kuveytturk.com.tr/boa.virtualpos.services/Home'
         gateway_3d: 'https://boatest.kuveytturk.com.tr/boa.virtualpos.services/Home/ThreeDModelPayGate'
         query_api: 'https://boatest.kuveytturk.com.tr/BOA.Integration.WCFService/BOA.Integration.VirtualPos/VirtualPosService.svc?wsdl'
-      test_mode: true
     vakifkatilim:
       gateway_class: Mews\Pos\Gateways\VakifKatilimPos
       credentials:
@@ -185,7 +178,6 @@ mews_pos:
         payment_api: 'https://boa.vakifkatilim.com.tr/VirtualPOS.Gateway/Home'
         gateway_3d: 'https://boa.vakifkatilim.com.tr/VirtualPOS.Gateway/Home/ThreeDModelPayGate'
         gateway_3d_host: 'https://boa.vakifkatilim.com.tr/VirtualPOS.Gateway/CommonPaymentPage/CommonPaymentPage'
-      test_mode: true
     payflexv4_ziraat:
       gateway_class: Mews\Pos\Gateways\PayFlexV4Pos
       credentials:
@@ -197,7 +189,6 @@ mews_pos:
         payment_api: 'https://preprod.payflex.com.tr/Ziraatbank/VposWeb/v3/Vposreq.aspx'
         gateway_3d: 'https://preprod.payflex.com.tr/ZiraatBank/MpiWeb/MPI_Enrollment.aspx'
         query_api: 'https://sanalpos.ziraatbank.com.tr/v4/UIWebService/Search.aspx'
-      test_mode: true
     payflexcpv4_vakifbank:
       gateway_class: Mews\Pos\Gateways\PayFlexCPV4Pos
       credentials:
@@ -209,7 +200,6 @@ mews_pos:
         payment_api: 'https://cptest.vakifbank.com.tr/CommonPayment/api/RegisterTransaction'
         gateway_3d: 'https://cptest.vakifbank.com.tr/CommonPayment/api/VposTransaction'
         query_api: 'https://cptest.vakifbank.com.tr/CommonPayment/SecurePayment'
-      test_mode: true
     akbankpos:
       gateway_class: Mews\Pos\Gateways\AkbankPos
       credentials:
@@ -222,7 +212,6 @@ mews_pos:
         payment_api: 'https://apipre.akbank.com/api/v1/payment/virtualpos'
         gateway_3d: 'https://virtualpospaymentgatewaypre.akbank.com/securepay'
         gateway_3d_host: 'https://virtualpospaymentgatewaypre.akbank.com/payhosting'
-      test_mode: true
     toslapos:
       gateway_class: Mews\Pos\Gateways\ToslaPos
       credentials:
@@ -234,7 +223,4 @@ mews_pos:
         payment_api: 'https://prepentegrasyon.tosla.com/api/Payment'
         gateway_3d: 'https://prepentegrasyon.tosla.com/api/Payment/ProcessCardForm'
         gateway_3d_host: 'https://prepentegrasyon.tosla.com/api/Payment/threeDSecure'
-      test_mode: true
-
-
 ```

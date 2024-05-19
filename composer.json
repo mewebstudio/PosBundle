@@ -27,7 +27,7 @@
     ],
     "require": {
         "php": ">=7.4",
-        "mews/pos": "^1.1",
+        "mews/pos": "^1.2",
         "symfony/config": "^4.0 | ^5.0 | ^6.0 | ^7.0",
         "symfony/dependency-injection": "^4.0 | ^5.0 | ^6.0 | ^7.0",
         "symfony/event-dispatcher": "^4.0 | ^5.0 | ^6.0 | ^7.0",
@@ -37,11 +37,19 @@
     "require-dev": {
         "nyholm/psr7": "^1.8",
         "psr/http-client": "^1.0",
-        "symfony/http-client": "^7.0"
+        "symfony/framework-bundle": "^6.4",
+        "symfony/http-client": "^6.4",
+        "symfony/phpunit-bridge": "^6.4",
+        "symfony/yaml": "^6.4"
     },
     "autoload": {
         "psr-4": {
             "Mews\\PosBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Mews\\PosBundle\\Tests\\": "tests/"
         }
     }
 }

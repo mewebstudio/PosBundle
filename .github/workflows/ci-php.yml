@@ -1,0 +1,21 @@
+name: Unit Tests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        php: ['7.4', '8.2']
+        dependency-version: [prefer-stable]
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Install dependencies
+        run: composer install --no-suggest
+
+      - name: Run integration test suite
+        run: vendor/bin/simple-phpunit --testsuite=integration

@@ -40,7 +40,7 @@ class MewsPosExtension extends Extension
                 $container->registerAliasForArgument($serviceId, PosInterface::class, $bank)
                     ->setPublic(false);
 
-                $gatewayDefinition->addTag('mews_pos.gateway.bank', ['key' => $serviceId]);
+                $gatewayDefinition->addTag('mews_pos.gateway', ['key' => $serviceId]);
 
                 if ($i === 0) {
                     // set the first gateway as a default for injection
