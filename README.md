@@ -28,6 +28,7 @@
        estpos: # herhangi unique bir isim
          gateway_class: Mews\Pos\Gateways\EstV3Pos
          lang: !php/const Mews\Pos\PosInterface::LANG_TR # optional
+         test_mode: false #optional, default: false;
          credentials:
            payment_model: !php/const Mews\Pos\PosInterface::MODEL_3D_SECURE
            merchant_id: 700xxxxxx
@@ -38,7 +39,6 @@
            payment_api: 'https://entegrasyon.asseco-see.com.tr/fim/api' 
            gateway_3d: 'https://entegrasyon.asseco-see.com.tr/fim/est3Dgate'
            gateway_3d_host: 'https://sanalpos.sanalakpos.com.tr/fim/est3Dgate' # optional, 3D Host ödemeler için zorunlu
-         test_mode: false #optional, default: false;
        yapikredi:
          gateway_class: Mews\Pos\Gateways\PosNet
          credentials:
@@ -50,7 +50,6 @@
          gateway_endpoints:
            payment_api: 'https://setmpos.ykb.com/PosnetWebService/XML'
            gateway_3d: 'https://setmpos.ykb.com/3DSWebService/YKBPaymentService'
-         test_mode: false
    ```
 
 ### Ornek 3D Secure Odeme
@@ -129,15 +128,7 @@ class SingleBankThreeDSecurePaymentController extends AbstractController
         );
         $session->set('order', $order);
 
-        //$card = $this->createCard($this->pos, $request->request->all());
-        $card = $this->createCard($this->pos, [ // normalde POST ile kart bilgileri gelecek
-            'number' => '4546xxxxyyyywwwwzzzz',
-            'year'   => '26',
-            'month'  => '12',
-            'cvv'    => '000',
-            'name'   => 'John Doe',
-            'type'   => CreditCardInterface::CARD_TYPE_VISA,
-        ]);
+        $card = $this->createCard($this->pos, $request->request->all());
 
         /**
          * PayFlex'te provizyonu (odemeyi) tamamlamak icin tekrar kredi kart bilgileri isteniyor,
@@ -285,14 +276,9 @@ class SingleBankThreeDSecurePaymentController extends AbstractController
             dd($e);
         }
 
-        $response = $this->pos->getResponse();
-
-        // iptal, iade, siparis durum sorgulama islemleri yapabilmek icin $response'u kaydediyoruz
-        $session->set('last_response', $response);
-
         if ($this->pos->isSuccess()) {
             echo 'success';
-            exit;
+            dd($this->pos->getResponse());
         } else {
             dd($response);
         }
