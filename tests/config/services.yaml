@@ -1,0 +1,39 @@
+services:
+  _defaults:
+    public: true
+
+  # making services public by adding alias for it.
+  test.mews_pos.gateway.estpos:
+    alias: mews_pos.gateway.estpos
+  test.mews_pos.gateway.yapikredi:
+    alias: mews_pos.gateway.yapikredi
+
+  test.mews_pos.gateway.albaraka:
+    alias: mews_pos.gateway.albaraka
+
+  test.mews_pos.gateway.payfor_finansbank:
+    alias: mews_pos.gateway.payfor_finansbank
+
+  test.mews_pos.gateway.garanti:
+    alias: mews_pos.gateway.garanti
+
+  test.mews_pos.gateway.interpos_denizbank:
+    alias: mews_pos.gateway.interpos_denizbank
+
+  test.mews_pos.gateway.kuveytpos:
+    alias: mews_pos.gateway.kuveytpos
+
+  test.mews_pos.gateway.vakifkatilim:
+    alias: mews_pos.gateway.vakifkatilim
+
+  test.mews_pos.gateway.payflexv4_ziraat:
+    alias: mews_pos.gateway.payflexv4_ziraat
+
+  test.mews_pos.gateway.payflexcpv4_vakifbank:
+    alias: mews_pos.gateway.payflexcpv4_vakifbank
+
+  test.mews_pos.gateway.akbankpos:
+    alias: mews_pos.gateway.akbankpos
+
+  test.mews_pos.gateway.toslapos:
+    alias: mews_pos.gateway.toslapos
