@@ -96,7 +96,7 @@ class SingleBankThreeDSecurePaymentController extends AbstractController
          * birden fazla banka oldugunda bu sekilde hepsine erisebilirsiniz
          * @var PosInterface[]
          */
-        #[TaggedIterator('mews_pos.gateway.bank')]
+        #[TaggedIterator('mews_pos.gateway')]
         private iterable $banks,
     )
     {
