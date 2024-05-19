@@ -37,10 +37,10 @@
     "require-dev": {
         "nyholm/psr7": "^1.8",
         "psr/http-client": "^1.0",
-        "symfony/framework-bundle": "^6.0",
-        "symfony/http-client": "^6.0",
-        "symfony/phpunit-bridge": "^6.0",
-        "symfony/yaml": "^6.0"
+        "symfony/framework-bundle": "^6.4",
+        "symfony/http-client": "^6.4",
+        "symfony/phpunit-bridge": "^6.4",
+        "symfony/yaml": "^6.4"
     },
     "autoload": {
         "psr-4": {

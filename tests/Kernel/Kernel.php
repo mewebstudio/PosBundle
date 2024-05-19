@@ -23,6 +23,7 @@ class Kernel extends \Symfony\Component\HttpKernel\Kernel
 
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
+        $loader->load(__DIR__.'/../config/framework.yaml', 'yaml');
         $loader->load(__DIR__.'/../config/services.yaml', 'yaml');
         $loader->load(__DIR__.'/../config/mews_pos.yaml', 'yaml');
     }
