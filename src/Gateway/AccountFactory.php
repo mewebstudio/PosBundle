@@ -7,6 +7,7 @@ use Mews\Pos\Entity\Account\PayFlexAccount;
 use Mews\Pos\Exceptions\MissingAccountInfoException;
 use Mews\Pos\Factory\AccountFactory as MewsPosAccountFactory;
 use Mews\Pos\Gateways\AkbankPos;
+use Mews\Pos\Gateways\EstPos;
 use Mews\Pos\Gateways\EstV3Pos;
 use Mews\Pos\Gateways\GarantiPos;
 use Mews\Pos\Gateways\InterPos;
@@ -36,6 +37,7 @@ class AccountFactory
     public static function createAccount(string $gatewayClass, string $name, array $credentials, string $lang = PosInterface::LANG_TR): AbstractPosAccount
     {
         switch ($gatewayClass) {
+            case EstPos::class:
             case EstV3Pos::class:
                 return MewsPosAccountFactory::createEstPosAccount(
                     $name,
