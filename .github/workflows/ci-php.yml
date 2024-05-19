@@ -4,11 +4,12 @@ on: [push, pull_request]
 
 jobs:
   test:
+
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
       matrix:
-        php: ['8.2']
+        php: ['7.4', '8.2']
         dependency-version: [prefer-stable]
     steps:
       - uses: actions/checkout@v1
