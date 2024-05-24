@@ -9,10 +9,11 @@
 - [Kurulum](#kurulum)
 - [Ornek 3D Secure Odeme](#farkli-banka-sanal-poslarini-eklemek)
 - [Konfigurasyon Yapısı ve Örnekler](./docs/EXAMPLE_CONFIGURATIONS.md)
+- [API ve 3D Form verisini degiştirme](./docs/EXAMPLE-API-ISTEK-VE-3D-FORM-VERSINI-DEGISTIRME.md)
 
 ## Minimum Gereksinimler
   - PHP >= 7.4
-  - mews/pos ^1.2
+  - mews/pos ^1.3
   - Symfony 4|5|6|7
 
 ## Kurulum
@@ -33,7 +34,7 @@
            payment_model: !php/const Mews\Pos\PosInterface::MODEL_3D_SECURE
            merchant_id: 700xxxxxx
            user_name: ISXXXXXX #EstPos: kullanici adi
-           user_password: ISXXXXX #EstPos: kullanici sifresi
+           user_password: ISYYYYY #EstPos: kullanici sifresi
            enc_key: TRPXXXXX
          gateway_endpoints: # ilgili ortamin (test/prod) URL'leriyle degistiriniz:
            payment_api: 'https://entegrasyon.asseco-see.com.tr/fim/api' 
@@ -59,8 +60,6 @@
 namespace App\Controller;
 
 use Mews\Pos\Entity\Card\CreditCardInterface;
-use Mews\Pos\Event\Before3DFormHashCalculatedEvent;
-use Mews\Pos\Event\RequestDataPreparedEvent;
 use Mews\Pos\Exceptions\CardTypeNotSupportedException;
 use Mews\Pos\Exceptions\CardTypeRequiredException;
 use Mews\Pos\Exceptions\HashMismatchException;
@@ -69,7 +68,6 @@ use Mews\Pos\Gateways\PayFlexV4Pos;
 use Mews\Pos\PosInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -90,7 +88,6 @@ class SingleBankThreeDSecurePaymentController extends AbstractController
          */
         private PosInterface             $yapikrediTest,
         private UrlGeneratorInterface    $urlGenerator,
-        private EventDispatcherInterface $eventDispatcher,
         /**
          * birden fazla banka oldugunda bu sekilde hepsine erisebilirsiniz
          * @var PosInterface[]
@@ -109,8 +106,7 @@ class SingleBankThreeDSecurePaymentController extends AbstractController
     /**
      * Kullanicidan kredi kart bilgileri alip buraya POST ediyoruz
      */
-    //#[Route('/form', name: 'single_bank_payment_3d_redirect_form', methods: ['POST'])]
-    #[Route('/form', name: 'single_bank_payment_3d_redirect_form')]
+    #[Route('/form', name: 'single_bank_payment_3d_redirect_form', methods: ['POST'])]
     public function form(Request $request)
     {
         $session = $request->getSession();
@@ -138,77 +134,6 @@ class SingleBankThreeDSecurePaymentController extends AbstractController
             $session->set('card', $request->request->all());
         }
         $session->set('tx', $transaction);
-
-        // ============================================================================================
-        // OZEL DURUMLAR ICIN KODLAR START
-        // ============================================================================================
-        $formVerisiniOlusturmakIcinApiIstegiGonderenGatewayler = [
-            \Mews\Pos\Gateways\PosNet::class,
-            \Mews\Pos\Gateways\KuveytPos::class,
-            \Mews\Pos\Gateways\ToslaPos::class,
-            \Mews\Pos\Gateways\VakifKatilimPos::class,
-            \Mews\Pos\Gateways\PayFlexV4Pos::class,
-            \Mews\Pos\Gateways\PayFlexCPV4Pos::class,
-        ];
-        if (in_array($this->pos::class, $formVerisiniOlusturmakIcinApiIstegiGonderenGatewayler, true)) {
-            $this->eventDispatcher->addListener(RequestDataPreparedEvent::class, function (RequestDataPreparedEvent $event) {
-                //Burda istek banka API'na gonderilmeden once gonderilecek veriyi degistirebilirsiniz.
-                // Ornek:
-//            if ($event->getTxType() === PosInterface::TX_TYPE_PAY_AUTH) {
-//                $data         = $event->getRequestData();
-//                $data['abcd'] = '1234';
-//                $event->setRequestData($data);
-//            }
-            });
-        }
-
-        // KuveytVos TDV2.0.0 icin ozel biri durum
-        $this->eventDispatcher->addListener(
-            RequestDataPreparedEvent::class,
-            function (RequestDataPreparedEvent $requestDataPreparedEvent): void {
-                if ($this->pos::class !== \Mews\Pos\Gateways\KuveytPos::class) {
-                    return;
-                }
-                // KuveytPos TDV2.0.0 icin zorunlu eklenmesi gereken ekstra alanlar:
-                $additionalRequestDataForKuveyt = [
-                    'DeviceData'     => [
-                        'DeviceChannel' => '02',
-                    ],
-                    'CardHolderData' => [
-                        'BillAddrCity'     => 'İstanbul',
-                        'BillAddrCountry'  => '792',
-                        'BillAddrLine1'    => 'XXX Mahallesi XXX Caddesi No 55 Daire 1',
-                        'BillAddrPostCode' => '34000',
-                        'BillAddrState'    => '40',
-                        'Email'            => 'xxxxx@gmail.com',
-                        'MobilePhone'      => [
-                            'Cc'         => '90',
-                            'Subscriber' => '1234567899',
-                        ],
-                    ],
-                ];
-                $requestData                    = $requestDataPreparedEvent->getRequestData();
-                $requestData                    = array_merge_recursive($requestData, $additionalRequestDataForKuveyt);
-                $requestDataPreparedEvent->setRequestData($requestData);
-            });
-
-        /**
-         * Bu Event'i dinleyerek 3D formun hash verisi hesaplanmadan önce formun input array içireğini güncelleyebilirsiniz.
-         * Eger ekleyeceginiz veri hash hesaplamada kullanilmiyorsa form verisi olusturduktan sonra da ekleyebilirsiniz.
-         */
-        $this->eventDispatcher->addListener(Before3DFormHashCalculatedEvent::class, function (Before3DFormHashCalculatedEvent $event): void {
-            if ($this->pos::class === \Mews\Pos\Gateways\EstV3Pos::class) {
-//                // Örnek 2: callbackUrl eklenmesi
-//                $formInputs                = $event->getFormInputs();
-//                $formInputs['callbackUrl'] = $formInputs['failUrl'];
-//                $formInputs['refreshTime'] = '10'; // birim: saniye; callbackUrl sisteminin doğru çalışması için eklenmesi gereken parametre
-//                $event->setFormInputs($formInputs);
-            }
-        });
-
-        // ============================================================================================
-        // OZEL DURUMLAR ICIN KODLAR END
-        // ============================================================================================
 
         try {
             $formData = $this->pos->get3DFormData($order, $this->paymentModel, $transaction, $card);
@@ -239,22 +164,6 @@ class SingleBankThreeDSecurePaymentController extends AbstractController
         ) {
             return new RedirectResponse($request->getBaseUrl());
         }
-
-        // ============================================================================================
-        // OZEL DURUMLAR ICIN KODLAR START
-        // ============================================================================================
-        //Isbank İMECE kart ile MODEL_3D_SECURE yöntemiyle ödeme için ekstra alanların eklenme örneği
-        $this->eventDispatcher->addListener(RequestDataPreparedEvent::class, function (RequestDataPreparedEvent $event) {
-            if ($event->getTxType() === PosInterface::TX_TYPE_PAY_AUTH) {
-//                $data                    = $event->getRequestData();
-//                $data['Extra']['IMCKOD'] = '9999'; // IMCKOD bilgisi bankadan alınmaktadır.
-//                $data['Extra']['FDONEM'] = '5'; // Ödemenin faizsiz ertelenmesini istediğiniz dönem sayısı
-//                $event->setRequestData($data);
-            }
-        });
-        // ============================================================================================
-        // OZEL DURUMLAR ICIN KODLAR END
-        // ============================================================================================
 
         $card = null;
         if ($this->pos::class === \Mews\Pos\Gateways\PayFlexV4Pos::class) {
@@ -354,4 +263,88 @@ class SingleBankThreeDSecurePaymentController extends AbstractController
       <button type="submit" class="btn btn-lg btn-block btn-success">Submit</button>
    </div>
 </form>
+```
+KuveytPos TDV2.0.0 için ekstra veri eklemek zorunludur.
+Bunun EventListener ile yapabilirsiniz:
+```php
+<?php
+
+namespace App\EventListener;
+
+use Mews\Pos\Event\RequestDataPreparedEvent;
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+
+/**
+ * KuveytPos TDV2.0.0 odemenin calismasi icin zorunlu eklenmesi gereken alan var.
+ */
+#[AsEventListener(event: RequestDataPreparedEvent::class)]
+final class KuveytPosV2RequestDataPreparedEventListener
+{
+    public function __invoke(RequestDataPreparedEvent $event): void
+    {
+        if ($event->getGatewayClass() !== \Mews\Pos\Gateways\KuveytPos::class) {
+            return;
+        }
+
+        /**
+         * ekstra eklenmesi gereken verileri isteseniz $order icine ekleyip sonra o verilere
+         * $event->getOrder() ile erisebilirsiniz.
+         */
+        $additionalRequestDataForKuveyt = [
+            'DeviceData'     => [
+                /**
+                 * DeviceChannel : DeviceData alanı içerisinde gönderilmesi beklenen işlemin yapıldığı cihaz bilgisi.
+                 * 2 karakter olmalıdır. 01-Mobil, 02-Web Browser için kullanılmalıdır.
+                 */
+                'DeviceChannel' => '02',
+            ],
+            'CardHolderData' => [
+                /**
+                 * BillAddrCity: Kullanılan kart ile ilişkili kart hamilinin fatura adres şehri.
+                 * Maksimum 50 karakter uzunluğunda olmalıdır.
+                 */
+                'BillAddrCity'     => 'İstanbul',
+                /**
+                 * BillAddrCountry Kullanılan kart ile ilişkili kart hamilinin fatura adresindeki ülke kodu.
+                 * Maksimum 3 karakter uzunluğunda olmalıdır.
+                 * ISO 3166-1 sayısal üç haneli ülke kodu standardı kullanılmalıdır.
+                 */
+                'BillAddrCountry'  => '792',
+                /**
+                 * BillAddrLine1: Kullanılan kart ile ilişkili kart hamilinin teslimat adresinde yer alan sokak vb. bilgileri içeren açık adresi.
+                 * Maksimum 150 karakter uzunluğunda olmalıdır.
+                 */
+                'BillAddrLine1'    => 'XXX Mahallesi XXX Caddesi No 55 Daire 1',
+                /**
+                 * BillAddrPostCode: Kullanılan kart ile ilişkili kart hamilinin fatura adresindeki posta kodu.
+                 */
+                'BillAddrPostCode' => '34000',
+                /**
+                 * BillAddrState: CardHolderData alanı içerisinde gönderilmesi beklenen ödemede kullanılan kart ile ilişkili kart hamilinin fatura adresindeki il veya eyalet bilgisi kodu.
+                 * ISO 3166-2'de tanımlı olan il/eyalet kodu olmalıdır.
+                 */
+                'BillAddrState'    => '40',
+                /**
+                 * Email: Kullanılan kart ile ilişkili kart hamilinin iş yerinde oluşturduğu hesapta kullandığı email adresi.
+                 * Maksimum 254 karakter uzunluğunda olmalıdır.
+                 */
+                'Email'            => 'xxxxx@gmail.com',
+                'MobilePhone'      => [
+                    /**
+                     * Cc: Kullanılan kart ile ilişkili kart hamilinin cep telefonuna ait ülke kodu. 1-3 karakter uzunluğunda olmalıdır.
+                     */
+                    'Cc'         => '90',
+                    /**
+                     * Subscriber: Kullanılan kart ile ilişkili kart hamilinin cep telefonuna ait abone numarası.
+                     * Maksimum 15 karakter uzunluğunda olmalıdır.
+                     */
+                    'Subscriber' => '1234567899',
+                ],
+            ],
+        ];
+        $requestData                    = $event->getRequestData();
+        $requestData                    = \array_merge_recursive($requestData, $additionalRequestDataForKuveyt);
+        $event->setRequestData($requestData);
+    }
+}
 ```
