@@ -9,8 +9,8 @@ use Mews\Pos\Factory\ResponseDataMapperFactory;
 use Mews\Pos\Factory\SerializerFactory;
 use Mews\Pos\PosInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Psr\Http\Client\ClientInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpClient\Psr18Client;
 
 class GatewayFactory
 {
@@ -19,7 +19,7 @@ class GatewayFactory
         array                    $options,
         EventDispatcherInterface $eventDispatcher,
         LoggerInterface          $logger,
-        Psr18Client              $client
+        ClientInterface          $client
     ): PosInterface
     {
         $credentials  = $options['credentials'];
