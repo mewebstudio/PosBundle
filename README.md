@@ -170,6 +170,7 @@ class SingleBankThreeDSecurePaymentController extends AbstractController
             // bu gateway için ödemeyi tamamlarken tekrar kart bilgisi lazım.
             $savedCard = $session->get('card');
             $card      = $this->createCard($this->pos, $savedCard);
+            $session->remove('card');
         }
 
         $order = $session->get('order');
@@ -264,6 +265,17 @@ class SingleBankThreeDSecurePaymentController extends AbstractController
    </div>
 </form>
 ```
+
+
+PHP Sessioni kullanıyorsanız bu ayarları da yapmanız gerekiyor:
+```yaml
+# /config/packages/framework.yaml
+framework:
+   session:
+        cookie_secure: true
+        cookie_samesite: none
+```
+
 KuveytPos TDV2.0.0 için ekstra veri eklemek zorunludur.
 Bunun EventListener ile yapabilirsiniz:
 ```php
