@@ -24,6 +24,8 @@ class VakifKatilimPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
     {
         parent::configureOptions($resolver);
 
+        $this->require3DGateway($resolver);
+
         $resolver->setDefault('credentials', function (OptionsResolver $subResolver): void {
             $subResolver->setRequired([
                 'terminal_id',

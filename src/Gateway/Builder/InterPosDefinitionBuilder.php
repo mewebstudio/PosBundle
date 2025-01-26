@@ -33,5 +33,7 @@ class InterPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
             $subResolver->setAllowedTypes('user_name', ['int', 'string']);
             $subResolver->setAllowedTypes('user_password', ['int', 'string']);
         });
+
+        $this->require3DGateway($resolver);
     }
 }

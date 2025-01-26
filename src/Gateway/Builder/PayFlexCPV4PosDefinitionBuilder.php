@@ -2,18 +2,17 @@
 
 namespace Mews\PosBundle\Gateway\Builder;
 
-use Mews\Pos\Gateways\EstPos;
-use Mews\Pos\Gateways\EstV3Pos;
+use Mews\Pos\Gateways\PayFlexCPV4Pos;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class EstV3PosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
+class PayFlexCPV4PosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
 {
     /**
      * @inheritDoc
      */
     public function supports(string $gatewayClass): bool
     {
-        return \in_array($gatewayClass, [EstPos::class, EstV3Pos::class], true);
+        return PayFlexCPV4Pos::class === $gatewayClass;
     }
 
     protected function getRequiredExtensions(): array
@@ -25,15 +24,22 @@ class EstV3PosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
     {
         parent::configureOptions($resolver);
 
+        $this->require3DGateway($resolver);
+
         $resolver->setDefault('credentials', function (OptionsResolver $subResolver): void {
             $subResolver->setRequired([
-                'user_name',
+                'terminal_id',
                 'user_password',
             ]);
-            $subResolver->setAllowedTypes('user_name', ['int', 'string']);
+            $subResolver->setAllowedTypes('terminal_id', ['int', 'string']);
             $subResolver->setAllowedTypes('user_password', ['int', 'string']);
-        });
 
-        $this->require3DGateway($resolver);
+            $subResolver
+                ->setDefined('sub_merchant_id')
+                ->setAllowedTypes('sub_merchant_id', ['string']);
+
+            // enc_key is not used, we set it to empty string by default.
+            $subResolver->setDefault('enc_key', '');
+        });
     }
 }

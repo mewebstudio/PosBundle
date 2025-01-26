@@ -13,7 +13,7 @@
 
 ## Minimum Gereksinimler
   - PHP >= 7.4
-  - mews/pos ^1.3
+  - mews/pos ^1.6
   - Symfony 4|5|6|7
 
 ## Kurulum
@@ -136,7 +136,18 @@ class SingleBankThreeDSecurePaymentController extends AbstractController
         $session->set('tx', $transaction);
 
         try {
-            $formData = $this->pos->get3DFormData($order, $this->paymentModel, $transaction, $card);
+            $formData = $this->pos->get3DFormData(
+            $order,
+            $this->paymentModel,
+            $transaction,
+            $card,
+            /**
+            * MODEL_3D_SECURE veya MODEL_3D_PAY ödemelerde kredi kart verileri olmadan
+            * form verisini oluşturmak için true yapabilirsiniz.
+            * Yine de bazı gatewaylerde kartsız form verisi oluşturulamıyor.
+            */
+            false
+            );
         } catch (\Throwable $e) {
             dd($e);
         }
@@ -254,16 +265,20 @@ class SingleBankThreeDSecurePaymentController extends AbstractController
 
 `redirect-form.html.twig`:
 ```html
-<form method="{{ formData.method }}" action="{{ formData.gateway }}"  class="redirect-form" role="form">
-   {% for key, value in formData.inputs %}
-   <input type="hidden" name="{{ key }}" value="{{ value }}">
-   {% endfor %}
-   <div class="text-center">Redirecting...</div>
-   <hr>
-   <div class="form-group text-center">
-      <button type="submit" class="btn btn-lg btn-block btn-success">Submit</button>
-   </div>
-</form>
+{% if formData is iterable %}
+   <form method="{{ formData.method }}" action="{{ formData.gateway }}" class="redirect-form" role="form">
+      {% for key, value in formData.inputs %}
+        <input type="hidden" name="{{ key }}" value="{{ value }}">
+      {% endfor %}
+      <div class="text-center">Redirecting...</div>
+      <hr>
+      <div class="form-group text-center">
+         <button type="submit" class="btn btn-lg btn-block btn-success">Submit</button>
+      </div>
+   </form>
+{% else %}
+    {{ formData | raw }}
+{% endif %}
 ```
 
 

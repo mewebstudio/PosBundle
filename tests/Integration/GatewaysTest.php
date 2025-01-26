@@ -37,7 +37,10 @@ class GatewaysTest extends TestCase
         $this->assertSame(PosInterface::LANG_EN, $pos->getAccount()->getLang());
         $this->assertSame('https://entegrasyon.asseco-see.com.tr/fim/api', $pos->getApiURL());
         $this->assertSame('https://entegrasyon.asseco-see.com.tr/fim/est3Dgate', $pos->get3DGatewayURL());
-        $this->assertSame('https://sanalpos.sanalakpos.com.tr/fim/est3Dgate', $pos->get3DHostGatewayURL());
+        $this->assertSame(
+            'https://sanalpos.sanalakpos.com.tr/fim/est3Dgate',
+            $pos->get3DGatewayURL(PosInterface::MODEL_3D_HOST)
+        );
         $this->assertSame(false, $pos->isTestMode());
     }
 
@@ -68,7 +71,10 @@ class GatewaysTest extends TestCase
         $this->assertSame('1010353453534', $pos->getAccount()->getUsername());
         $this->assertSame('33,10,221,10,33,10,221,10', $pos->getAccount()->getStoreKey());
         $this->assertSame(PosInterface::LANG_TR, $pos->getAccount()->getLang());
-        $this->assertSame('https://epostest.albarakaturk.com.tr/ALBMerchantService/MerchantJSONAPI.svc', $pos->getApiURL());
+        $this->assertSame(
+            'https://epostest.albarakaturk.com.tr/ALBMerchantService/MerchantJSONAPI.svc/Sale',
+            $pos->getApiURL(PosInterface::TX_TYPE_PAY_AUTH)
+        );
         $this->assertSame('https://setmpos.ykb.com/3DSWebService/YKBPaymentService', $pos->get3DGatewayURL());
         $this->assertSame(true, $pos->isTestMode());
     }
@@ -86,7 +92,10 @@ class GatewaysTest extends TestCase
         $this->assertSame(PosInterface::LANG_TR, $pos->getAccount()->getLang());
         $this->assertSame('https://vpostest.qnbfinansbank.com/Gateway/XMLGate.aspx', $pos->getApiURL());
         $this->assertSame('https://vpostest.qnbfinansbank.com/Gateway/Default.aspx', $pos->get3DGatewayURL());
-        $this->assertSame('https://vpostest.qnbfinansbank.com/Gateway/3DHost.aspx', $pos->get3DHostGatewayURL());
+        $this->assertSame(
+            'https://vpostest.qnbfinansbank.com/Gateway/3DHost.aspx',
+            $pos->get3DGatewayURL(PosInterface::MODEL_3D_HOST)
+        );
         $this->assertSame(true, $pos->isTestMode());
     }
 
@@ -122,7 +131,10 @@ class GatewaysTest extends TestCase
         $this->assertSame(PosInterface::LANG_TR, $pos->getAccount()->getLang());
         $this->assertSame('https://test.inter-vpos.com.tr/mpi/Default.aspx', $pos->getApiURL());
         $this->assertSame('https://test.inter-vpos.com.tr/mpi/Default.aspx', $pos->get3DGatewayURL());
-        $this->assertSame('https://test.inter-vpos.com.tr/mpi/3DHost.aspx', $pos->get3DHostGatewayURL());
+        $this->assertSame(
+            'https://test.inter-vpos.com.tr/mpi/3DHost.aspx',
+            $pos->get3DGatewayURL(PosInterface::MODEL_3D_HOST)
+        );
         $this->assertSame(false, $pos->isTestMode());
     }
 
@@ -137,7 +149,10 @@ class GatewaysTest extends TestCase
         $this->assertSame('apiuser1', $pos->getAccount()->getUsername());
         $this->assertSame('Api1232', $pos->getAccount()->getStoreKey());
         $this->assertSame(PosInterface::LANG_TR, $pos->getAccount()->getLang());
-        $this->assertSame('https://boatest.kuveytturk.com.tr/boa.virtualpos.services/Home', $pos->getApiURL());
+        $this->assertSame(
+            'https://boatest.kuveytturk.com.tr/boa.virtualpos.services/Home/ThreeDModelProvisionGate',
+            $pos->getApiURL(PosInterface::TX_TYPE_PAY_AUTH, PosInterface::MODEL_3D_SECURE)
+        );
         $this->assertSame('https://boatest.kuveytturk.com.tr/boa.virtualpos.services/Home/ThreeDModelPayGate', $pos->get3DGatewayURL());
         $this->assertSame('https://boatest.kuveytturk.com.tr/BOA.Integration.WCFService/BOA.Integration.VirtualPos/VirtualPosService.svc?wsdl', $pos->getQueryAPIUrl());
         $this->assertSame(false, $pos->isTestMode());
@@ -154,14 +169,17 @@ class GatewaysTest extends TestCase
         $this->assertSame('APIUSER', $pos->getAccount()->getUsername());
         $this->assertSame('kdsnsksl', $pos->getAccount()->getStoreKey());
         $this->assertSame(PosInterface::LANG_TR, $pos->getAccount()->getLang());
-        $this->assertSame('https://boa.vakifkatilim.com.tr/VirtualPOS.Gateway/Home', $pos->getApiURL());
+        $this->assertSame(
+            'https://boa.vakifkatilim.com.tr/VirtualPOS.Gateway/Home/ThreeDModelProvisionGate',
+            $pos->getApiURL(PosInterface::TX_TYPE_PAY_AUTH, PosInterface::MODEL_3D_SECURE)
+        );
         $this->assertSame(
             'https://boa.vakifkatilim.com.tr/VirtualPOS.Gateway/Home/ThreeDModelPayGate',
             $pos->get3DGatewayURL()
         );
         $this->assertSame(
             'https://boa.vakifkatilim.com.tr/VirtualPOS.Gateway/CommonPaymentPage/CommonPaymentPage',
-            $pos->get3DHostGatewayURL()
+            $pos->get3DGatewayURL(PosInterface::MODEL_3D_HOST)
         );
         $this->assertSame(false, $pos->isTestMode());
     }
@@ -199,16 +217,12 @@ class GatewaysTest extends TestCase
         $this->assertSame('123456', $pos->getAccount()->getPassword());
         $this->assertSame(PosInterface::LANG_TR, $pos->getAccount()->getLang());
         $this->assertSame(
-            'https://cptest.vakifbank.com.tr/CommonPayment/api/RegisterTransaction',
+            'https://cptest.vakifbank.com.tr/CommonPayment/api/VposTransaction',
             $pos->getApiURL()
         );
         $this->assertSame(
-            'https://cptest.vakifbank.com.tr/CommonPayment/api/VposTransaction',
+            'https://cptest.vakifbank.com.tr/CommonPayment/api/RegisterTransaction',
             $pos->get3DGatewayURL()
-        );
-        $this->assertSame(
-            'https://cptest.vakifbank.com.tr/CommonPayment/SecurePayment',
-            $pos->getQueryAPIUrl()
         );
         $this->assertSame(false, $pos->isTestMode());
     }
@@ -227,8 +241,8 @@ class GatewaysTest extends TestCase
         );
         $this->assertSame(PosInterface::LANG_TR, $pos->getAccount()->getLang());
         $this->assertSame(
-            'https://apipre.akbank.com/api/v1/payment/virtualpos',
-            $pos->getApiURL()
+            'https://apipre.akbank.com/api/v1/payment/virtualpos/transaction/process',
+            $pos->getApiURL(PosInterface::TX_TYPE_PAY_AUTH)
         );
         $this->assertSame(
             'https://virtualpospaymentgatewaypre.akbank.com/securepay',
@@ -236,7 +250,7 @@ class GatewaysTest extends TestCase
         );
         $this->assertSame(
             'https://virtualpospaymentgatewaypre.akbank.com/payhosting',
-            $pos->get3DHostGatewayURL()
+            $pos->get3DGatewayURL(PosInterface::MODEL_3D_HOST)
         );
         $this->assertSame(false, $pos->isTestMode());
     }
@@ -252,8 +266,8 @@ class GatewaysTest extends TestCase
         $this->assertSame('POS_ENT_Test_001!*!*', $pos->getAccount()->getStoreKey());
         $this->assertSame(PosInterface::LANG_TR, $pos->getAccount()->getLang());
         $this->assertSame(
-            'https://prepentegrasyon.tosla.com/api/Payment',
-            $pos->getApiURL()
+            'https://prepentegrasyon.tosla.com/api/Payment/threeDPayment',
+            $pos->getApiURL(PosInterface::TX_TYPE_PAY_AUTH, PosInterface::MODEL_3D_PAY)
         );
         $this->assertSame(
             'https://prepentegrasyon.tosla.com/api/Payment/ProcessCardForm',
@@ -261,8 +275,29 @@ class GatewaysTest extends TestCase
         );
         $this->assertSame(
             'https://prepentegrasyon.tosla.com/api/Payment/threeDSecure/',
-            $pos->get3DHostGatewayURL()
+            $pos->get3DGatewayURL(PosInterface::MODEL_3D_HOST)
         );
         $this->assertSame(false, $pos->isTestMode());
+    }
+
+
+    public function testParamPos(): void
+    {
+        $pos = $this->container->get('test.mews_pos.gateway.parampos');
+        $this->assertInstanceOf(\Mews\Pos\Gateways\ParamPos::class, $pos);
+
+        $this->assertSame('parampos', $pos->getAccount()->getBank());
+        $this->assertSame('12345', $pos->getAccount()->getClientId());
+        $this->assertSame('TestUser', $pos->getAccount()->getUsername());
+        $this->assertSame('TestPassword', $pos->getAccount()->getPassword());
+        $this->assertSame('kjsdfk-lkjdf-kjshdf-kjhfdsk-jfhshfsdfdsjf', $pos->getAccount()->getStoreKey());
+        $this->assertSame(
+            'https://test-dmz.param.com.tr/turkpos.ws/service_turkpos_test.asmx',
+            $pos->getApiURL()
+        );
+        $this->assertSame(
+            'https://test-pos.param.com.tr/default.aspx',
+            $pos->get3DGatewayURL(PosInterface::MODEL_3D_HOST)
+        );
     }
 }

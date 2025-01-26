@@ -197,9 +197,8 @@ mews_pos:
         terminal_id: VPXXXXXXXX # HostTerminalNo: İşlemin hangi terminal üzerinden gönderileceği bilgisi
         user_password: XXXXXXXX # Password: Üye işyeri şifresi
       gateway_endpoints:
-        payment_api: 'https://cptest.vakifbank.com.tr/CommonPayment/api/RegisterTransaction'
-        gateway_3d: 'https://cptest.vakifbank.com.tr/CommonPayment/api/VposTransaction'
-        query_api: 'https://cptest.vakifbank.com.tr/CommonPayment/SecurePayment'
+        payment_api: 'https://cptest.vakifbank.com.tr/CommonPayment/api/VposTransaction'
+        gateway_3d: 'https://cptest.vakifbank.com.tr/CommonPayment/api/RegisterTransaction'
     akbankpos:
       gateway_class: Mews\Pos\Gateways\AkbankPos
       credentials:
@@ -223,4 +222,17 @@ mews_pos:
         payment_api: 'https://prepentegrasyon.tosla.com/api/Payment'
         gateway_3d: 'https://prepentegrasyon.tosla.com/api/Payment/ProcessCardForm'
         gateway_3d_host: 'https://prepentegrasyon.tosla.com/api/Payment/threeDSecure'
+    parampos:
+      gateway_class: Mews\Pos\Gateways\ParamPos
+      credentials:
+        payment_model: !php/const Mews\Pos\PosInterface::MODEL_3D_SECURE
+        merchant_id: 12345 #CLIENT_CODE Terminal ID
+        user_name: TestUser #CLIENT_USERNAME Kullanıcı adı
+        user_password: TestPassword #CLIENT_PASSWORD Şifre
+        enc_key: kjsdfk-lkjdf-kjshdf-kjhfdsk-jfhshfsdfdsjf #GUID Üye İşyeri ait anahtarı
+      gateway_endpoints:
+        payment_api: 'https://test-dmz.param.com.tr/turkpos.ws/service_turkpos_test.asmx'
+        #API URL for 3D host payment
+        payment_api_2: 'https://test-pos.param.com.tr/to.ws/Service_Odeme.asmx'
+        gateway_3d_host: 'https://test-pos.param.com.tr/default.aspx'
 ```
