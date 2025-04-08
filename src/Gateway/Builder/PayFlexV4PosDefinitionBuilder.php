@@ -2,18 +2,17 @@
 
 namespace Mews\PosBundle\Gateway\Builder;
 
-use Mews\Pos\Gateways\PayFlexCPV4Pos;
 use Mews\Pos\Gateways\PayFlexV4Pos;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class PayFlexPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
+class PayFlexV4PosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
 {
     /**
      * @inheritDoc
      */
     public function supports(string $gatewayClass): bool
     {
-        return \in_array($gatewayClass, [PayFlexV4Pos::class, PayFlexCPV4Pos::class], true);
+        return PayFlexV4Pos::class === $gatewayClass;
     }
 
     protected function getRequiredExtensions(): array
@@ -24,6 +23,8 @@ class PayFlexPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
     protected function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
+
+        $this->require3DGateway($resolver);
 
         $resolver->setDefault('gateway_endpoints', function (OptionsResolver $subResolver): void {
             $subResolver

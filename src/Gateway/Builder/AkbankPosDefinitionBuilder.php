@@ -32,5 +32,7 @@ class AkbankPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
                 ->setDefined('sub_merchant_id')
                 ->setAllowedTypes('sub_merchant_id', ['string', 'int']);
         });
+
+        $this->require3DGateway($resolver);
     }
 }

@@ -37,3 +37,6 @@ services:
 
   test.mews_pos.gateway.toslapos:
     alias: mews_pos.gateway.toslapos
+
+  test.mews_pos.gateway.parampos:
+    alias: mews_pos.gateway.parampos

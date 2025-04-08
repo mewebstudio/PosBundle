@@ -32,6 +32,8 @@ class KuveytPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
                 ->setAllowedTypes('query_api', 'string');
         });
 
+        $this->require3DGateway($resolver);
+
         $resolver->setDefault('credentials', function (OptionsResolver $subResolver): void {
             $subResolver->setRequired([
                 'user_name',

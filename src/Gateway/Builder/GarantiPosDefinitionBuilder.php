@@ -41,5 +41,7 @@ class GarantiPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
             $subResolver->setAllowedTypes('refund_user_name', ['int', 'string']);
             $subResolver->setAllowedTypes('refund_user_password', ['int', 'string']);
         });
+
+        $this->require3DGateway($resolver);
     }
 }

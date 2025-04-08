@@ -2,18 +2,17 @@
 
 namespace Mews\PosBundle\Gateway\Builder;
 
-use Mews\Pos\Gateways\EstPos;
-use Mews\Pos\Gateways\EstV3Pos;
+use Mews\Pos\Gateways\ParamPos;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class EstV3PosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
+class ParamPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
 {
     /**
      * @inheritDoc
      */
     public function supports(string $gatewayClass): bool
     {
-        return \in_array($gatewayClass, [EstPos::class, EstV3Pos::class], true);
+        return \in_array($gatewayClass, [ParamPos::class], true);
     }
 
     protected function getRequiredExtensions(): array
@@ -34,6 +33,10 @@ class EstV3PosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
             $subResolver->setAllowedTypes('user_password', ['int', 'string']);
         });
 
-        $this->require3DGateway($resolver);
+        $resolver->setDefault('gateway_endpoints', function (OptionsResolver $subResolver): void {
+            $subResolver
+                ->setDefined('payment_api_2') // for 3D Host
+                ->setAllowedTypes('payment_api_2', 'string');
+        });
     }
 }

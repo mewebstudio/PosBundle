@@ -47,10 +47,8 @@ abstract class AbstractGatewayDefinitionBuilder implements GatewayDefinitionBuil
             ]);
             $subResolver->setRequired([
                 'payment_api',
-                'gateway_3d',
             ]);
             $subResolver->setAllowedTypes('payment_api', ['string']);
-            $subResolver->setAllowedTypes('gateway_3d', ['string']);
             $subResolver->setAllowedTypes('gateway_3d_host', ['string']);
         });
 
@@ -69,6 +67,16 @@ abstract class AbstractGatewayDefinitionBuilder implements GatewayDefinitionBuil
                 PosInterface::MODEL_3D_PAY_HOSTING,
                 PosInterface::MODEL_3D_HOST,
             ]);
+        });
+    }
+
+    protected function require3DGateway(OptionsResolver $resolver): void
+    {
+        $resolver->setDefault('gateway_endpoints', function (OptionsResolver $subResolver): void {
+            $subResolver->setRequired([
+                'gateway_3d',
+            ]);
+            $subResolver->setAllowedTypes('gateway_3d', ['string']);
         });
     }
 
