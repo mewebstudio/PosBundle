@@ -39,6 +39,7 @@
         "psr/http-client": "^1.0",
         "symfony/framework-bundle": "^6.4",
         "symfony/http-client": "^6.4",
+        "symfony/monolog-bundle": "^3.10",
         "symfony/phpunit-bridge": "^6.4",
         "symfony/yaml": "^6.4"
     },
