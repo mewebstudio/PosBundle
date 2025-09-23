@@ -44,6 +44,7 @@ class Configuration implements ConfigurationInterface
                                 ->end()
                                 ->scalarNode('refund_user_name')->info("GarantiPos: ProvUserID;")->end()
                                 ->scalarNode('refund_user_password')->info("GarantiPos: ProvisionPassword")->end()
+                                ->scalarNode('mbr_id')->info("PayFor: MbrId")->end()
                             ->end()
                         ->end()
                         ->arrayNode('gateway_endpoints')->isRequired()

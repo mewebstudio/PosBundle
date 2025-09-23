@@ -2,6 +2,7 @@
 
 namespace Mews\PosBundle\Tests\Integration;
 
+use Mews\Pos\Entity\Account\PayForAccount;
 use Mews\Pos\PosInterface;
 use Mews\PosBundle\Tests\Kernel\Kernel;
 use PHPUnit\Framework\TestCase;
@@ -90,6 +91,28 @@ class GatewaysTest extends TestCase
         $this->assertSame('UXXXXX', $pos->getAccount()->getPassword());
         $this->assertSame('12345678', $pos->getAccount()->getStoreKey());
         $this->assertSame(PosInterface::LANG_TR, $pos->getAccount()->getLang());
+        $this->assertSame(PayForAccount::MBR_ID_FINANSBANK, $pos->getAccount()->getMbrId());
+        $this->assertSame('https://vpostest.qnbfinansbank.com/Gateway/XMLGate.aspx', $pos->getApiURL());
+        $this->assertSame('https://vpostest.qnbfinansbank.com/Gateway/Default.aspx', $pos->get3DGatewayURL());
+        $this->assertSame(
+            'https://vpostest.qnbfinansbank.com/Gateway/3DHost.aspx',
+            $pos->get3DGatewayURL(PosInterface::MODEL_3D_HOST)
+        );
+        $this->assertSame(true, $pos->isTestMode());
+    }
+
+    public function testPayForPosZiraatKatilim(): void
+    {
+        $pos = $this->container->get('test.mews_pos.gateway.payfor_ziraat_katilim');
+        $this->assertInstanceOf(\Mews\Pos\Gateways\PayForPos::class, $pos);
+
+        $this->assertSame('payfor_ziraat_katilim', $pos->getAccount()->getBank());
+        $this->assertSame('08530313141242', $pos->getAccount()->getClientId());
+        $this->assertSame('QNB_API_USERNAME', $pos->getAccount()->getUsername());
+        $this->assertSame('UXXXXX', $pos->getAccount()->getPassword());
+        $this->assertSame('12345678', $pos->getAccount()->getStoreKey());
+        $this->assertSame(PosInterface::LANG_TR, $pos->getAccount()->getLang());
+        $this->assertSame(PayForAccount::MBR_ID_ZIRAAT_KATILIM, $pos->getAccount()->getMbrId());
         $this->assertSame('https://vpostest.qnbfinansbank.com/Gateway/XMLGate.aspx', $pos->getApiURL());
         $this->assertSame('https://vpostest.qnbfinansbank.com/Gateway/Default.aspx', $pos->get3DGatewayURL());
         $this->assertSame(

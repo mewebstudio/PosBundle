@@ -55,6 +55,9 @@ mews_pos:
 
                 # GarantiPos: ProvisionPassword
                 refund_user_password: ~
+
+                # PayFor: MbrId
+                mbr_id: ~
             gateway_endpoints:    # Required
                 payment_api:          ~ # Required
                 gateway_3d:           ~ # Required
@@ -124,6 +127,7 @@ mews_pos:
         user_name: QNB_API_XXXXXXXX # UserCode: Otorizasyon sistemi kullanıcı kodu.
         user_password: XXXXXXXX # Otorizasyon sistemi kullanıcı şifresi.
         enc_key: XXXXXXXX #  MerchantPass: 3D Secure şifresidir.
+        mbr_id: !php/const Mews\Pos\Entity\Account\PayForAccount::MBR_ID_FINANSBANK # veya MBR_ID_ZIRAAT_KATILIM (Kurum Kodu)
       gateway_endpoints:
         payment_api: 'https://vpostest.qnbfinansbank.com/Gateway/XMLGate.aspx'
         gateway_3d: 'https://vpostest.qnbfinansbank.com/Gateway/Default.aspx'

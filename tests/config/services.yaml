@@ -14,6 +14,9 @@ services:
   test.mews_pos.gateway.payfor_finansbank:
     alias: mews_pos.gateway.payfor_finansbank
 
+  test.mews_pos.gateway.payfor_ziraat_katilim:
+    alias: mews_pos.gateway.payfor_ziraat_katilim
+
   test.mews_pos.gateway.garanti:
     alias: mews_pos.gateway.garanti
 

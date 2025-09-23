@@ -42,14 +42,28 @@ mews_pos:
       gateway_class: Mews\Pos\Gateways\PayForPos
       credentials:
         payment_model: !php/const Mews\Pos\PosInterface::MODEL_3D_SECURE
-        merchant_id: 08530313141242
-        user_name: QNB_API_USERNAME
-        user_password: UXXXXX
-        enc_key: 12345678
+        merchant_id: 08530313141242 # Üye işyeri numarası.
+        user_name: QNB_API_USERNAME # Otorizasyon sistemi kullanıcı kodu.
+        user_password: UXXXXX # Otorizasyon sistemi kullanıcı şifresi.
+        enc_key: 12345678 # 3D Secure şifresidir.
       gateway_endpoints:
         payment_api: 'https://vpostest.qnbfinansbank.com/Gateway/XMLGate.aspx'
         gateway_3d: 'https://vpostest.qnbfinansbank.com/Gateway/Default.aspx'
         gateway_3d_host: 'https://vpostest.qnbfinansbank.com/Gateway/3DHost.aspx'
+      test_mode: true
+    payfor_ziraat_katilim:
+      gateway_class: Mews\Pos\Gateways\PayForPos
+      credentials:
+        payment_model: !php/const Mews\Pos\PosInterface::MODEL_3D_SECURE
+        merchant_id: 08530313141242 # Üye işyeri numarası.
+        user_name: QNB_API_USERNAME # Otorizasyon sistemi kullanıcı kodu.
+        user_password: UXXXXX # Otorizasyon sistemi kullanıcı şifresi.
+        enc_key: 12345678 # 3D Secure şifresidir.
+        mbr_id: !php/const Mews\Pos\Entity\Account\PayForAccount::MBR_ID_ZIRAAT_KATILIM # Kurum Kodu
+      gateway_endpoints:
+        payment_api: 'https://vpos.ziraatkatilim.com.tr/Mpi/XMLGate.aspx'
+        gateway_3d: 'https://vpos.ziraatkatilim.com.tr/Mpi/Default.aspx'
+        gateway_3d_host: 'https://vpos.ziraatkatilim.com.tr/Mpi/3Dhost.aspx'
       test_mode: true
     garanti:
       gateway_class: Mews\Pos\Gateways\GarantiPos
