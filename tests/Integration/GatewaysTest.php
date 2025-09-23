@@ -4,25 +4,20 @@ namespace Mews\PosBundle\Tests\Integration;
 
 use Mews\Pos\Entity\Account\PayForAccount;
 use Mews\Pos\PosInterface;
-use Mews\PosBundle\Tests\Kernel\Kernel;
-use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * @coversNothing
  */
-class GatewaysTest extends TestCase
+class GatewaysTest extends KernelTestCase
 {
     private ContainerInterface $container;
-    private KernelInterface $kernel;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->kernel = new Kernel();
-        $this->kernel->boot();
-        $this->container = $this->kernel->getContainer();
+        $this->container = static::getContainer();
     }
 
     public function testEstPos(): void
