@@ -13,7 +13,6 @@ mews_pos:
         payment_api: 'https://entegrasyon.asseco-see.com.tr/fim/api'
         gateway_3d: 'https://entegrasyon.asseco-see.com.tr/fim/est3Dgate'
         gateway_3d_host: 'https://sanalpos.sanalakpos.com.tr/fim/est3Dgate'
-      test_mode: false
     yapikredi:
       gateway_class: Mews\Pos\Gateways\PosNet
       credentials:
@@ -25,7 +24,6 @@ mews_pos:
       gateway_endpoints:
         payment_api: 'https://setmpos.ykb.com/PosnetWebService/XML'
         gateway_3d: 'https://setmpos.ykb.com/3DSWebService/YKBPaymentService'
-      test_mode: true
     albaraka:
       gateway_class: Mews\Pos\Gateways\PosNetV1Pos
       credentials:
@@ -37,7 +35,6 @@ mews_pos:
       gateway_endpoints:
         payment_api: 'https://epostest.albarakaturk.com.tr/ALBMerchantService/MerchantJSONAPI.svc'
         gateway_3d: 'https://setmpos.ykb.com/3DSWebService/YKBPaymentService'
-      test_mode: true
     payfor_finansbank:
       gateway_class: Mews\Pos\Gateways\PayForPos
       credentials:
@@ -50,7 +47,6 @@ mews_pos:
         payment_api: 'https://vpostest.qnbfinansbank.com/Gateway/XMLGate.aspx'
         gateway_3d: 'https://vpostest.qnbfinansbank.com/Gateway/Default.aspx'
         gateway_3d_host: 'https://vpostest.qnbfinansbank.com/Gateway/3DHost.aspx'
-      test_mode: true
     payfor_ziraat_katilim:
       gateway_class: Mews\Pos\Gateways\PayForPos
       credentials:
@@ -60,11 +56,12 @@ mews_pos:
         user_password: UXXXXX # Otorizasyon sistemi kullanıcı şifresi.
         enc_key: 12345678 # 3D Secure şifresidir.
         mbr_id: !php/const Mews\Pos\Entity\Account\PayForAccount::MBR_ID_ZIRAAT_KATILIM # Kurum Kodu
+      gateway_configs:
+        disable_3d_hash_check: true
       gateway_endpoints:
-        payment_api: 'https://vpos.ziraatkatilim.com.tr/Mpi/XMLGate.aspx'
-        gateway_3d: 'https://vpos.ziraatkatilim.com.tr/Mpi/Default.aspx'
-        gateway_3d_host: 'https://vpos.ziraatkatilim.com.tr/Mpi/3Dhost.aspx'
-      test_mode: true
+        payment_api: 'https://payfortestziraatkatilim.cordisnetwork.com/Mpi/XMLGate.aspx'
+        gateway_3d: 'https://payfortestziraatkatilim.cordisnetwork.com/Mpi/Default.aspx'
+        gateway_3d_host: 'https://payfortestziraatkatilim.cordisnetwork.com/Mpi/3DHost.aspx'
     garanti:
       gateway_class: Mews\Pos\Gateways\GarantiPos
       credentials:
@@ -79,6 +76,7 @@ mews_pos:
       gateway_endpoints:
         payment_api: 'https://sanalposprovtest.garantibbva.com.tr/VPServlet'
         gateway_3d: 'https://sanalposprovtest.garantibbva.com.tr/servlet/gt3dengine'
+      test_mode: true
     interpos_denizbank:
       gateway_class: Mews\Pos\Gateways\InterPos
       credentials:
@@ -94,6 +92,8 @@ mews_pos:
         gateway_3d_host: 'https://test.inter-vpos.com.tr/mpi/3DHost.aspx'
     kuveytpos:
       gateway_class: Mews\Pos\Gateways\KuveytPos
+      gateway_configs:
+        test_mode: true
       credentials:
         payment_model: !php/const Mews\Pos\PosInterface::MODEL_3D_SECURE
         merchant_id: 496

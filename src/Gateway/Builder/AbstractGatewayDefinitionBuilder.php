@@ -68,6 +68,13 @@ abstract class AbstractGatewayDefinitionBuilder implements GatewayDefinitionBuil
                 PosInterface::MODEL_3D_HOST,
             ]);
         });
+
+        $resolver->setDefault('gateway_configs', function (OptionsResolver $subResolver): void {
+            $subResolver->setDefault('test_mode', false)
+                ->setAllowedTypes('test_mode', 'boolean');
+            $subResolver->setDefault('disable_3d_hash_check', false)
+                ->setAllowedTypes('disable_3d_hash_check', 'boolean');
+        });
     }
 
     protected function require3DGateway(OptionsResolver $resolver): void

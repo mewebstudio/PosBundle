@@ -63,7 +63,11 @@ mews_pos:
                 gateway_3d:           ~ # Required
                 gateway_3d_host:      ~
                 query_api:            ~
-            test_mode:            false
+            gateway_configs:
+              test_mode: false
+              # Hash kontrolü kütühaneden dolayı başarısız sonuçlanıyorsa bu ayarla devre dışı bırakılabilir.
+              # Ancak hash kontrolünün devre dışı bırakılması güvenlik açığı oluşturabilir.
+              disable_3d_hash_check: false
 ```
 
 Parametrelerin açıklamalarında hangi gateway'de neye karşılık geldiğini yazar.
@@ -86,7 +90,6 @@ mews_pos:
     estpos_payten:
       gateway_class: Mews\Pos\Gateways\EstV3Pos
       lang: !php/const Mews\Pos\PosInterface::LANG_TR #optional
-      test_mode: true # optional
       credentials:
         payment_model: !php/const Mews\Pos\PosInterface::MODEL_3D_SECURE
         merchant_id: 700XXXXXXX
@@ -127,11 +130,27 @@ mews_pos:
         user_name: QNB_API_XXXXXXXX # UserCode: Otorizasyon sistemi kullanıcı kodu.
         user_password: XXXXXXXX # Otorizasyon sistemi kullanıcı şifresi.
         enc_key: XXXXXXXX #  MerchantPass: 3D Secure şifresidir.
-        mbr_id: !php/const Mews\Pos\Entity\Account\PayForAccount::MBR_ID_FINANSBANK # veya MBR_ID_ZIRAAT_KATILIM (Kurum Kodu)
+        mbr_id: !php/const Mews\Pos\Entity\Account\PayForAccount::MBR_ID_FINANSBANK
       gateway_endpoints:
         payment_api: 'https://vpostest.qnbfinansbank.com/Gateway/XMLGate.aspx'
         gateway_3d: 'https://vpostest.qnbfinansbank.com/Gateway/Default.aspx'
         gateway_3d_host: 'https://vpostest.qnbfinansbank.com/Gateway/3DHost.aspx'
+    payfor_ziraat_katilim:
+      gateway_class: Mews\Pos\Gateways\PayForPos
+      credentials:
+        payment_model: !php/const Mews\Pos\PosInterface::MODEL_3D_SECURE
+        merchant_id: 08530000XXXXXXXX # Üye İşyeri Numarası.
+        user_name: QNB_API_XXXXXXXX # UserCode: Otorizasyon sistemi kullanıcı kodu.
+        user_password: XXXXXXXX # Otorizasyon sistemi kullanıcı şifresi.
+        enc_key: XXXXXXXX #  MerchantPass: 3D Secure şifresidir.
+        mbr_id: !php/const Mews\Pos\Entity\Account\PayForAccount::MBR_ID_ZIRAAT_KATILIM
+      gateway_configs:
+        # Ziraat Katilim için hash kontrolü çalışmıyor. O yüzden devre dışı bırakıyoruz.
+        disable_3d_hash_check: true
+      gateway_endpoints:
+        payment_api: 'https://payfortestziraatkatilim.cordisnetwork.com/Mpi/XMLGate.aspx'
+        gateway_3d: 'https://payfortestziraatkatilim.cordisnetwork.com/Mpi/Default.aspx'
+        gateway_3d_host: 'https://payfortestziraatkatilim.cordisnetwork.com/Mpi/3DHost.aspx'
     garanti:
       gateway_class: Mews\Pos\Gateways\GarantiPos
       credentials:
@@ -146,6 +165,8 @@ mews_pos:
       gateway_endpoints:
         payment_api: 'https://sanalposprovtest.garantibbva.com.tr/VPServlet'
         gateway_3d: 'https://sanalposprovtest.garantibbva.com.tr/servlet/gt3dengine'
+      gateway_configs:
+        test_mode: false # Test ortamı için true yapılması gerekir.
     interpos_denizbank:
       gateway_class: Mews\Pos\Gateways\InterPos
       credentials:
@@ -170,6 +191,8 @@ mews_pos:
         payment_api: 'https://boatest.kuveytturk.com.tr/boa.virtualpos.services/Home'
         gateway_3d: 'https://boatest.kuveytturk.com.tr/boa.virtualpos.services/Home/ThreeDModelPayGate'
         query_api: 'https://boatest.kuveytturk.com.tr/BOA.Integration.WCFService/BOA.Integration.VirtualPos/VirtualPosService.svc?wsdl'
+      gateway_configs:
+        test_mode: false # Testlerinizi SSL olmayan ortamda yapıyorsanız true yapmanız gerekir.
     vakifkatilim:
       gateway_class: Mews\Pos\Gateways\VakifKatilimPos
       credentials:

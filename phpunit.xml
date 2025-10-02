@@ -23,6 +23,7 @@
         <env name="KERNEL_CLASS" value="Mews\PosBundle\Tests\Kernel\Kernel"/>
         <env name="APP_ENV" value="test"/>
         <env name="APP_DEBUG" value="1"/>
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="weak"/>
     </php>
 
 <!--    <coverage cacheDirectory="var/code-coverage"-->

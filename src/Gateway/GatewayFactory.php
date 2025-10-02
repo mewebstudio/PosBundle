@@ -22,8 +22,9 @@ class GatewayFactory
         ClientInterface          $client
     ): PosInterface
     {
-        $credentials  = $options['credentials'];
-        $gatewayClass = $options['gateway_class'];
+        $credentials    = $options['credentials'];
+        $gatewayClass   = $options['gateway_class'];
+        $gatewayConfigs = $options['gateway_configs'] ?? [];
         if (!\in_array(PosInterface::class, \class_implements($gatewayClass), true)) {
             throw new \InvalidArgumentException(
                 \sprintf('gateway_class must be implementation of %s', PosInterface::class)
@@ -51,7 +52,10 @@ class GatewayFactory
 
         /** @var PosInterface $gateway */
         $gateway = new $gatewayClass(
-            ['gateway_endpoints' => $options['gateway_endpoints']],
+            [
+                'gateway_endpoints' => $options['gateway_endpoints'],
+                'gateway_configs' => $gatewayConfigs,
+            ],
             $account,
             $requestDataMapper,
             $responseDataMapper,
@@ -61,7 +65,9 @@ class GatewayFactory
             $logger,
         );
 
-        $gateway->setTestMode($options['test_mode']);
+        if (!isset($gatewayConfigs['test_mode']) && isset($options['test_mode'])) {
+            $gateway->setTestMode($options['test_mode']);
+        }
 
         return $gateway;
     }
