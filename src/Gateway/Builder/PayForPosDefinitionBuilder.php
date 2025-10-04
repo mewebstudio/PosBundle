@@ -2,6 +2,7 @@
 
 namespace Mews\PosBundle\Gateway\Builder;
 
+use Mews\Pos\Entity\Account\PayForAccount;
 use Mews\Pos\Gateways\PayForPos;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -33,6 +34,10 @@ class PayForPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
             $subResolver
                 ->setRequired('user_password')
                 ->setAllowedTypes('user_password', ['int', 'string']);
+            $subResolver
+                ->setDefined('mbr_id')
+                ->setDefault('mbr_id', PayForAccount::MBR_ID_FINANSBANK)
+                ->setAllowedTypes('mbr_id', ['int', 'string']);
         });
     }
 }

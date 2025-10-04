@@ -2,26 +2,22 @@
 
 namespace Mews\PosBundle\Tests\Integration;
 
+use Mews\Pos\Entity\Account\PayForAccount;
 use Mews\Pos\PosInterface;
-use Mews\PosBundle\Tests\Kernel\Kernel;
-use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * @coversNothing
  */
-class GatewaysTest extends TestCase
+class GatewaysTest extends KernelTestCase
 {
     private ContainerInterface $container;
-    private KernelInterface $kernel;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->kernel = new Kernel();
-        $this->kernel->boot();
-        $this->container = $this->kernel->getContainer();
+        $this->container = static::getContainer();
     }
 
     public function testEstPos(): void
@@ -57,7 +53,7 @@ class GatewaysTest extends TestCase
         $this->assertSame(PosInterface::LANG_TR, $pos->getAccount()->getLang());
         $this->assertSame('https://setmpos.ykb.com/PosnetWebService/XML', $pos->getApiURL());
         $this->assertSame('https://setmpos.ykb.com/3DSWebService/YKBPaymentService', $pos->get3DGatewayURL());
-        $this->assertSame(true, $pos->isTestMode());
+        $this->assertSame(false, $pos->isTestMode());
     }
 
     public function testPosNetV1(): void
@@ -76,7 +72,7 @@ class GatewaysTest extends TestCase
             $pos->getApiURL(PosInterface::TX_TYPE_PAY_AUTH)
         );
         $this->assertSame('https://setmpos.ykb.com/3DSWebService/YKBPaymentService', $pos->get3DGatewayURL());
-        $this->assertSame(true, $pos->isTestMode());
+        $this->assertSame(false, $pos->isTestMode());
     }
 
     public function testPayForPos(): void
@@ -90,13 +86,35 @@ class GatewaysTest extends TestCase
         $this->assertSame('UXXXXX', $pos->getAccount()->getPassword());
         $this->assertSame('12345678', $pos->getAccount()->getStoreKey());
         $this->assertSame(PosInterface::LANG_TR, $pos->getAccount()->getLang());
+        $this->assertSame(PayForAccount::MBR_ID_FINANSBANK, $pos->getAccount()->getMbrId());
         $this->assertSame('https://vpostest.qnbfinansbank.com/Gateway/XMLGate.aspx', $pos->getApiURL());
         $this->assertSame('https://vpostest.qnbfinansbank.com/Gateway/Default.aspx', $pos->get3DGatewayURL());
         $this->assertSame(
             'https://vpostest.qnbfinansbank.com/Gateway/3DHost.aspx',
             $pos->get3DGatewayURL(PosInterface::MODEL_3D_HOST)
         );
-        $this->assertSame(true, $pos->isTestMode());
+        $this->assertSame(false, $pos->isTestMode());
+    }
+
+    public function testPayForPosZiraatKatilim(): void
+    {
+        $pos = $this->container->get('test.mews_pos.gateway.payfor_ziraat_katilim');
+        $this->assertInstanceOf(\Mews\Pos\Gateways\PayForPos::class, $pos);
+
+        $this->assertSame('payfor_ziraat_katilim', $pos->getAccount()->getBank());
+        $this->assertSame('08530313141242', $pos->getAccount()->getClientId());
+        $this->assertSame('QNB_API_USERNAME', $pos->getAccount()->getUsername());
+        $this->assertSame('UXXXXX', $pos->getAccount()->getPassword());
+        $this->assertSame('12345678', $pos->getAccount()->getStoreKey());
+        $this->assertSame(PosInterface::LANG_TR, $pos->getAccount()->getLang());
+        $this->assertSame(PayForAccount::MBR_ID_ZIRAAT_KATILIM, $pos->getAccount()->getMbrId());
+        $this->assertSame('https://payfortestziraatkatilim.cordisnetwork.com/Mpi/XMLGate.aspx', $pos->getApiURL());
+        $this->assertSame('https://payfortestziraatkatilim.cordisnetwork.com/Mpi/Default.aspx', $pos->get3DGatewayURL());
+        $this->assertSame(
+            'https://payfortestziraatkatilim.cordisnetwork.com/Mpi/3DHost.aspx',
+            $pos->get3DGatewayURL(PosInterface::MODEL_3D_HOST)
+        );
+        $this->assertSame(false, $pos->isTestMode());
     }
 
     public function testGarantiPos(): void
@@ -115,7 +133,7 @@ class GatewaysTest extends TestCase
         $this->assertSame(PosInterface::LANG_TR, $pos->getAccount()->getLang());
         $this->assertSame('https://sanalposprovtest.garantibbva.com.tr/VPServlet', $pos->getApiURL());
         $this->assertSame('https://sanalposprovtest.garantibbva.com.tr/servlet/gt3dengine', $pos->get3DGatewayURL());
-        $this->assertSame(false, $pos->isTestMode());
+        $this->assertSame(true, $pos->isTestMode());
     }
 
     public function testInterPos(): void
@@ -155,7 +173,7 @@ class GatewaysTest extends TestCase
         );
         $this->assertSame('https://boatest.kuveytturk.com.tr/boa.virtualpos.services/Home/ThreeDModelPayGate', $pos->get3DGatewayURL());
         $this->assertSame('https://boatest.kuveytturk.com.tr/BOA.Integration.WCFService/BOA.Integration.VirtualPos/VirtualPosService.svc?wsdl', $pos->getQueryAPIUrl());
-        $this->assertSame(false, $pos->isTestMode());
+        $this->assertSame(true, $pos->isTestMode());
     }
 
     public function testVakifKatilimPos(): void

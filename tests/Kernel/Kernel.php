@@ -4,6 +4,7 @@ namespace Mews\PosBundle\Tests\Kernel;
 
 use Mews\PosBundle\MewsPosBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
+use Symfony\Bundle\MonologBundle\MonologBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
 class Kernel extends \Symfony\Component\HttpKernel\Kernel
@@ -17,6 +18,7 @@ class Kernel extends \Symfony\Component\HttpKernel\Kernel
     {
         return [
            new MewsPosBundle(),
+           new MonologBundle(),
            new FrameworkBundle(),
         ];
     }
@@ -26,5 +28,6 @@ class Kernel extends \Symfony\Component\HttpKernel\Kernel
         $loader->load(__DIR__.'/../config/framework.yaml', 'yaml');
         $loader->load(__DIR__.'/../config/services.yaml', 'yaml');
         $loader->load(__DIR__.'/../config/mews_pos.yaml', 'yaml');
+        $loader->load(__DIR__.'/../config/packages/monolog.yaml', 'yaml');
     }
 }

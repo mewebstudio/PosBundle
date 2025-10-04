@@ -13,7 +13,7 @@
 
 ## Minimum Gereksinimler
   - PHP >= 7.4
-  - mews/pos ^1.6
+  - mews/pos ^1.7
   - Symfony 4|5|6|7
 
 ## Kurulum
@@ -29,7 +29,6 @@
        estpos: # herhangi unique bir isim
          gateway_class: Mews\Pos\Gateways\EstV3Pos
          lang: !php/const Mews\Pos\PosInterface::LANG_TR # optional
-         test_mode: false #optional, default: false;
          credentials:
            payment_model: !php/const Mews\Pos\PosInterface::MODEL_3D_SECURE
            merchant_id: 700xxxxxx
@@ -40,6 +39,8 @@
            payment_api: 'https://entegrasyon.asseco-see.com.tr/fim/api' 
            gateway_3d: 'https://entegrasyon.asseco-see.com.tr/fim/est3Dgate'
            gateway_3d_host: 'https://sanalpos.sanalakpos.com.tr/fim/est3Dgate' # optional, 3D Host ödemeler için zorunlu
+         gateway_configs:
+          test_mode: false #optional, default: false;
        yapikredi:
          gateway_class: Mews\Pos\Gateways\PosNet
          credentials:
@@ -192,6 +193,13 @@ class SingleBankThreeDSecurePaymentController extends AbstractController
         try {
             $this->pos->payment($this->paymentModel, $order, $transaction, $card);
         } catch (HashMismatchException $e) {
+            /**
+             * Bankadan gelen verilerin bankaya ait olmadığında bu exception oluşur.
+             * Veya Banka API bilgileriniz hatalı ise de oluşur.
+             * Eğer kütühaneden dolayı hash doğrulama hatası alıyorsanız, issue oluşturunuz.
+             * Issue çözülene kadar geçici olarak disable_3d_hash_check: true ayarla hash doğrulamasını devre dışı bırakabilirsiniz.
+             * Güvenlik açısından disable_3d_hash_check: false olarak kullanılması tavsiye edilmez.
+             */
             dd($e);
         } catch (\Exception|\Error $e) {
             dd($e);
