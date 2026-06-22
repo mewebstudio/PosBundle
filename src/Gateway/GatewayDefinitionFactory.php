@@ -30,7 +30,7 @@ class GatewayDefinitionFactory
         ];
     }
 
-    public function createDefinition(string $name, array $options): ?Definition
+    public function createDefinition(string $name, array $options): Definition
     {
         foreach ($this->builders as $builder) {
             if ($builder->supports($options['gateway_class'])) {
@@ -38,6 +38,8 @@ class GatewayDefinitionFactory
             }
         }
 
-        return null;
+        throw new \InvalidArgumentException(
+            \sprintf('No builder found for gateway class "%s" (bank: "%s").', $options['gateway_class'], $name)
+        );
     }
 }
