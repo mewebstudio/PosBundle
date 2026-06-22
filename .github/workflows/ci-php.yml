@@ -1,21 +1,63 @@
-name: Unit Tests
+name: Tests
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
 
 jobs:
   test:
-
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
-        php: ['7.4', '8.2']
-        dependency-version: [prefer-stable]
+        include:
+          - php: '7.4'
+            symfony: '^4.4'
+          - php: '7.4'
+            symfony: '^5.4'
+          - php: '8.1'
+            symfony: '^5.4'
+          - php: '8.1'
+            symfony: '^6.4'
+          - php: '8.2'
+            symfony: '^6.4'
+          - php: '8.2'
+            symfony: '^7.4'
+          - php: '8.2'
+            symfony: '^7.4'
+          - php: '8.3'
+            symfony: '^7.4'
+          - php: '8.4'
+            symfony: '^7.4'
+          - php: '8.4'
+            symfony: '^8.0'
+
+    name: PHP ${{ matrix.php }} / Symfony ${{ matrix.symfony }}
+
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v7
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: soap
+          coverage: none
+
+      - name: Configure Composer
+        run: composer config --global policy.advisories.block false
 
       - name: Install dependencies
-        run: composer install --no-suggest
+        run: |
+          composer require \
+            "symfony/framework-bundle:${{ matrix.symfony }}" \
+            "symfony/yaml:${{ matrix.symfony }}" \
+            "symfony/http-client:${{ matrix.symfony }}" \
+            --dev --no-update --no-interaction
+          composer update --no-interaction --prefer-dist
 
-      - name: Run integration test suite
+      - name: Run unit tests
+        run: vendor/bin/simple-phpunit --testsuite=unit
+
+      - name: Run integration tests
         run: vendor/bin/simple-phpunit --testsuite=integration

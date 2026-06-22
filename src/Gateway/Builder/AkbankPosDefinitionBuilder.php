@@ -24,7 +24,7 @@ class AkbankPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefault('credentials', function (OptionsResolver $subResolver): void {
+        $this->setNestedOptions($resolver, 'credentials', function (OptionsResolver $subResolver): void {
             $subResolver
                 ->setRequired('terminal_id')
                 ->setAllowedTypes('terminal_id', ['string', 'int']);
@@ -33,6 +33,10 @@ class AkbankPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
                 ->setAllowedTypes('sub_merchant_id', ['string', 'int']);
         });
 
-        $this->require3DGateway($resolver);
+    }
+
+    protected function getRequiredEndpoints(): array
+    {
+        return \array_merge(parent::getRequiredEndpoints(), ['gateway_3d']);
     }
 }

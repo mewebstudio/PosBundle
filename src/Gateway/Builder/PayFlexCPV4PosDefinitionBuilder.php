@@ -24,9 +24,7 @@ class PayFlexCPV4PosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
     {
         parent::configureOptions($resolver);
 
-        $this->require3DGateway($resolver);
-
-        $resolver->setDefault('credentials', function (OptionsResolver $subResolver): void {
+        $this->setNestedOptions($resolver, 'credentials', function (OptionsResolver $subResolver): void {
             $subResolver->setRequired([
                 'terminal_id',
                 'user_password',
@@ -41,5 +39,10 @@ class PayFlexCPV4PosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
             // enc_key is not used, we set it to empty string by default.
             $subResolver->setDefault('enc_key', '');
         });
+    }
+
+    protected function getRequiredEndpoints(): array
+    {
+        return \array_merge(parent::getRequiredEndpoints(), ['gateway_3d']);
     }
 }

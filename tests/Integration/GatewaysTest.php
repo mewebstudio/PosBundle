@@ -12,17 +12,24 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class GatewaysTest extends KernelTestCase
 {
-    private ContainerInterface $container;
+    private ContainerInterface $testContainer;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->container = static::getContainer();
+        // getContainer() was added in Symfony 5.3; older versions require bootKernel() first
+        if (method_exists(static::class, 'getContainer')) {
+            $this->testContainer = static::getContainer();
+        } else {
+            // todo remove this when dropping support for Symfony 4
+            static::bootKernel();
+            $this->testContainer = static::$kernel->getContainer();
+        }
     }
 
     public function testEstPos(): void
     {
-        $pos = $this->container->get('test.mews_pos.gateway.estpos');
+        $pos = $this->testContainer->get('test.mews_pos.gateway.estpos');
         $this->assertInstanceOf(\Mews\Pos\Gateways\EstV3Pos::class, $pos);
 
         $this->assertSame('estpos', $pos->getAccount()->getBank());
@@ -42,7 +49,7 @@ class GatewaysTest extends KernelTestCase
 
     public function testPosNet(): void
     {
-        $pos = $this->container->get('test.mews_pos.gateway.yapikredi');
+        $pos = $this->testContainer->get('test.mews_pos.gateway.yapikredi');
         $this->assertInstanceOf(\Mews\Pos\Gateways\PosNet::class, $pos);
 
         $this->assertSame('yapikredi', $pos->getAccount()->getBank());
@@ -58,7 +65,7 @@ class GatewaysTest extends KernelTestCase
 
     public function testPosNetV1(): void
     {
-        $pos = $this->container->get('test.mews_pos.gateway.albaraka');
+        $pos = $this->testContainer->get('test.mews_pos.gateway.albaraka');
         $this->assertInstanceOf(\Mews\Pos\Gateways\PosNetV1Pos::class, $pos);
 
         $this->assertSame('albaraka', $pos->getAccount()->getBank());
@@ -77,7 +84,7 @@ class GatewaysTest extends KernelTestCase
 
     public function testPayForPos(): void
     {
-        $pos = $this->container->get('test.mews_pos.gateway.payfor_finansbank');
+        $pos = $this->testContainer->get('test.mews_pos.gateway.payfor_finansbank');
         $this->assertInstanceOf(\Mews\Pos\Gateways\PayForPos::class, $pos);
 
         $this->assertSame('payfor_finansbank', $pos->getAccount()->getBank());
@@ -98,7 +105,7 @@ class GatewaysTest extends KernelTestCase
 
     public function testPayForPosZiraatKatilim(): void
     {
-        $pos = $this->container->get('test.mews_pos.gateway.payfor_ziraat_katilim');
+        $pos = $this->testContainer->get('test.mews_pos.gateway.payfor_ziraat_katilim');
         $this->assertInstanceOf(\Mews\Pos\Gateways\PayForPos::class, $pos);
 
         $this->assertSame('payfor_ziraat_katilim', $pos->getAccount()->getBank());
@@ -119,7 +126,7 @@ class GatewaysTest extends KernelTestCase
 
     public function testGarantiPos(): void
     {
-        $pos = $this->container->get('test.mews_pos.gateway.garanti');
+        $pos = $this->testContainer->get('test.mews_pos.gateway.garanti');
         $this->assertInstanceOf(\Mews\Pos\Gateways\GarantiPos::class, $pos);
 
         $this->assertSame('garanti', $pos->getAccount()->getBank());
@@ -138,7 +145,7 @@ class GatewaysTest extends KernelTestCase
 
     public function testInterPos(): void
     {
-        $pos = $this->container->get('test.mews_pos.gateway.interpos_denizbank');
+        $pos = $this->testContainer->get('test.mews_pos.gateway.interpos_denizbank');
         $this->assertInstanceOf(\Mews\Pos\Gateways\InterPos::class, $pos);
 
         $this->assertSame('interpos_denizbank', $pos->getAccount()->getBank());
@@ -158,7 +165,7 @@ class GatewaysTest extends KernelTestCase
 
     public function testKuveytPos(): void
     {
-        $pos = $this->container->get('test.mews_pos.gateway.kuveytpos');
+        $pos = $this->testContainer->get('test.mews_pos.gateway.kuveytpos');
         $this->assertInstanceOf(\Mews\Pos\Gateways\KuveytPos::class, $pos);
 
         $this->assertSame('kuveytpos', $pos->getAccount()->getBank());
@@ -178,7 +185,7 @@ class GatewaysTest extends KernelTestCase
 
     public function testVakifKatilimPos(): void
     {
-        $pos = $this->container->get('test.mews_pos.gateway.vakifkatilim');
+        $pos = $this->testContainer->get('test.mews_pos.gateway.vakifkatilim');
         $this->assertInstanceOf(\Mews\Pos\Gateways\VakifKatilimPos::class, $pos);
 
         $this->assertSame('vakifkatilim', $pos->getAccount()->getBank());
@@ -204,7 +211,7 @@ class GatewaysTest extends KernelTestCase
 
     public function testPayFlexV4Pos(): void
     {
-        $pos = $this->container->get('test.mews_pos.gateway.payflexv4_ziraat');
+        $pos = $this->testContainer->get('test.mews_pos.gateway.payflexv4_ziraat');
         $this->assertInstanceOf(\Mews\Pos\Gateways\PayFlexV4Pos::class, $pos);
 
         $this->assertSame('payflexv4_ziraat', $pos->getAccount()->getBank());
@@ -226,7 +233,7 @@ class GatewaysTest extends KernelTestCase
 
     public function testPayFlexCPV4Pos(): void
     {
-        $pos = $this->container->get('test.mews_pos.gateway.payflexcpv4_vakifbank');
+        $pos = $this->testContainer->get('test.mews_pos.gateway.payflexcpv4_vakifbank');
         $this->assertInstanceOf(\Mews\Pos\Gateways\PayFlexCPV4Pos::class, $pos);
 
         $this->assertSame('payflexcpv4_vakifbank', $pos->getAccount()->getBank());
@@ -247,7 +254,7 @@ class GatewaysTest extends KernelTestCase
 
     public function testAkbankPos(): void
     {
-        $pos = $this->container->get('test.mews_pos.gateway.akbankpos');
+        $pos = $this->testContainer->get('test.mews_pos.gateway.akbankpos');
         $this->assertInstanceOf(\Mews\Pos\Gateways\AkbankPos::class, $pos);
 
         $this->assertSame('akbankpos', $pos->getAccount()->getBank());
@@ -275,7 +282,7 @@ class GatewaysTest extends KernelTestCase
 
     public function testToslaPos(): void
     {
-        $pos = $this->container->get('test.mews_pos.gateway.toslapos');
+        $pos = $this->testContainer->get('test.mews_pos.gateway.toslapos');
         $this->assertInstanceOf(\Mews\Pos\Gateways\ToslaPos::class, $pos);
 
         $this->assertSame('toslapos', $pos->getAccount()->getBank());
@@ -301,7 +308,7 @@ class GatewaysTest extends KernelTestCase
 
     public function testParamPos(): void
     {
-        $pos = $this->container->get('test.mews_pos.gateway.parampos');
+        $pos = $this->testContainer->get('test.mews_pos.gateway.parampos');
         $this->assertInstanceOf(\Mews\Pos\Gateways\ParamPos::class, $pos);
 
         $this->assertSame('parampos', $pos->getAccount()->getBank());

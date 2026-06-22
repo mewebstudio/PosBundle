@@ -25,9 +25,7 @@ class PosNetPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
     {
         parent::configureOptions($resolver);
 
-        $this->require3DGateway($resolver);
-
-        $resolver->setDefault('credentials', function (OptionsResolver $subResolver): void {
+        $this->setNestedOptions($resolver, 'credentials', function (OptionsResolver $subResolver): void {
 
             $subResolver->setRequired([
                 'terminal_id',
@@ -36,5 +34,10 @@ class PosNetPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
             $subResolver->setAllowedTypes('terminal_id', ['int', 'string']);
             $subResolver->setAllowedTypes('user_name', ['int', 'string']);
         });
+    }
+
+    protected function getRequiredEndpoints(): array
+    {
+        return \array_merge(parent::getRequiredEndpoints(), ['gateway_3d']);
     }
 }

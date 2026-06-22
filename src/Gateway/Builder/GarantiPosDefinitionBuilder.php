@@ -24,7 +24,7 @@ class GarantiPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefault('credentials', function (OptionsResolver $subResolver): void {
+        $this->setNestedOptions($resolver, 'credentials', function (OptionsResolver $subResolver): void {
             $subResolver->setRequired([
                 'user_name',
                 'user_password',
@@ -42,6 +42,10 @@ class GarantiPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
             $subResolver->setAllowedTypes('refund_user_password', ['int', 'string']);
         });
 
-        $this->require3DGateway($resolver);
+    }
+
+    protected function getRequiredEndpoints(): array
+    {
+        return \array_merge(parent::getRequiredEndpoints(), ['gateway_3d']);
     }
 }

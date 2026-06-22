@@ -24,9 +24,7 @@ class ToslaPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
     {
         parent::configureOptions($resolver);
 
-        $this->require3DGateway($resolver);
-
-        $resolver->setDefault('credentials', function (OptionsResolver $subResolver): void {
+        $this->setNestedOptions($resolver, 'credentials', function (OptionsResolver $subResolver): void {
             $subResolver
                 ->setRequired('user_name')
                 ->setAllowedTypes('user_name', ['int', 'string']);
@@ -34,5 +32,10 @@ class ToslaPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
                 ->setDefined('sub_merchant_id')
                 ->setAllowedTypes('sub_merchant_id', ['int', 'string']);
         });
+    }
+
+    protected function getRequiredEndpoints(): array
+    {
+        return \array_merge(parent::getRequiredEndpoints(), ['gateway_3d']);
     }
 }
