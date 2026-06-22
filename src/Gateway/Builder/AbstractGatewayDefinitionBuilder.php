@@ -42,14 +42,16 @@ abstract class AbstractGatewayDefinitionBuilder implements GatewayDefinitionBuil
             ->setAllowedTypes('gateway_class', 'string');
 
         $resolver->setDefault('gateway_endpoints', function (OptionsResolver $subResolver): void {
-            $subResolver->setDefined([
-                'gateway_3d_host',
-            ]);
-            $subResolver->setRequired([
-                'payment_api',
-            ]);
-            $subResolver->setAllowedTypes('payment_api', ['string']);
-            $subResolver->setAllowedTypes('gateway_3d_host', ['string']);
+            $required = $this->getRequiredEndpoints();
+            $optional = $this->getOptionalEndpoints();
+
+            $subResolver->setRequired($required);
+            if ($optional) {
+                $subResolver->setDefined($optional);
+            }
+            foreach (\array_merge($required, $optional) as $key) {
+                $subResolver->setAllowedTypes($key, 'string');
+            }
         });
 
         $resolver->setDefault('credentials', function (OptionsResolver $subResolver): void {
@@ -77,14 +79,14 @@ abstract class AbstractGatewayDefinitionBuilder implements GatewayDefinitionBuil
         });
     }
 
-    protected function require3DGateway(OptionsResolver $resolver): void
+    protected function getRequiredEndpoints(): array
     {
-        $resolver->setDefault('gateway_endpoints', function (OptionsResolver $subResolver): void {
-            $subResolver->setRequired([
-                'gateway_3d',
-            ]);
-            $subResolver->setAllowedTypes('gateway_3d', ['string']);
-        });
+        return ['payment_api'];
+    }
+
+    protected function getOptionalEndpoints(): array
+    {
+        return ['gateway_3d_host'];
     }
 
     private function ensureRequiredExtensionsAvailable(string $name): void

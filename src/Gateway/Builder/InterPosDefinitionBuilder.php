@@ -34,6 +34,10 @@ class InterPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
             $subResolver->setAllowedTypes('user_password', ['int', 'string']);
         });
 
-        $this->require3DGateway($resolver);
+    }
+
+    protected function getRequiredEndpoints(): array
+    {
+        return \array_merge(parent::getRequiredEndpoints(), ['gateway_3d']);
     }
 }

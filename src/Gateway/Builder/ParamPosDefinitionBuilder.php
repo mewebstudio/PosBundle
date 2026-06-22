@@ -33,10 +33,10 @@ class ParamPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
             $subResolver->setAllowedTypes('user_password', ['int', 'string']);
         });
 
-        $resolver->setDefault('gateway_endpoints', function (OptionsResolver $subResolver): void {
-            $subResolver
-                ->setDefined('payment_api_2') // for 3D Host
-                ->setAllowedTypes('payment_api_2', 'string');
-        });
+    }
+
+    protected function getOptionalEndpoints(): array
+    {
+        return \array_merge(parent::getOptionalEndpoints(), ['payment_api_2']);
     }
 }

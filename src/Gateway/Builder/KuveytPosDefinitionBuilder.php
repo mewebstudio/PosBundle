@@ -26,14 +26,6 @@ class KuveytPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefault('gateway_endpoints', function (OptionsResolver $subResolver): void {
-            $subResolver
-                ->setRequired('query_api')
-                ->setAllowedTypes('query_api', 'string');
-        });
-
-        $this->require3DGateway($resolver);
-
         $resolver->setDefault('credentials', function (OptionsResolver $subResolver): void {
             $subResolver->setRequired([
                 'user_name',
@@ -43,5 +35,10 @@ class KuveytPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
                 ->setDefined('sub_merchant_id')
                 ->setAllowedTypes('sub_merchant_id', ['int', 'string']);
         });
+    }
+
+    protected function getRequiredEndpoints(): array
+    {
+        return \array_merge(parent::getRequiredEndpoints(), ['gateway_3d', 'query_api']);
     }
 }
