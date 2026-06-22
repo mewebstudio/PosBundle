@@ -17,9 +17,7 @@ class KuveytPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
 
     protected function getRequiredExtensions(): array
     {
-        return [
-            'soap' => 'ext-soap',
-        ];
+        return [];
     }
 
     protected function configureOptions(OptionsResolver $resolver): void
