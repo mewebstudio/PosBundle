@@ -120,7 +120,7 @@ mews_pos:
       gateway_class: Mews\Pos\Gateways\PayFlexV4Pos
       credentials:
         payment_model: !php/const Mews\Pos\PosInterface::MODEL_3D_SECURE
-        merchant_id: 000000000111111
+        merchant_id: '000000000111111'
         terminal_id: VP000095
         user_password: 3XTgER89as
       gateway_endpoints:
@@ -131,7 +131,7 @@ mews_pos:
       gateway_class: Mews\Pos\Gateways\PayFlexCPV4Pos
       credentials:
         payment_model: !php/const Mews\Pos\PosInterface::MODEL_3D_PAY
-        merchant_id: 000100000013506
+        merchant_id: '000100000013506'
         terminal_id: VP000579
         user_password: 123456
       gateway_endpoints:

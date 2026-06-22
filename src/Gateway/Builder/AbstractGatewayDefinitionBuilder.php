@@ -41,7 +41,7 @@ abstract class AbstractGatewayDefinitionBuilder implements GatewayDefinitionBuil
             ->setRequired('gateway_class')
             ->setAllowedTypes('gateway_class', 'string');
 
-        $resolver->setDefault('gateway_endpoints', function (OptionsResolver $subResolver): void {
+        $this->setNestedOptions($resolver, 'gateway_endpoints', function (OptionsResolver $subResolver): void {
             $required = $this->getRequiredEndpoints();
             $optional = $this->getOptionalEndpoints();
 
@@ -54,7 +54,7 @@ abstract class AbstractGatewayDefinitionBuilder implements GatewayDefinitionBuil
             }
         });
 
-        $resolver->setDefault('credentials', function (OptionsResolver $subResolver): void {
+        $this->setNestedOptions($resolver, 'credentials', function (OptionsResolver $subResolver): void {
             $subResolver->setRequired([
                 'merchant_id',
                 'payment_model',
@@ -71,7 +71,7 @@ abstract class AbstractGatewayDefinitionBuilder implements GatewayDefinitionBuil
             ]);
         });
 
-        $resolver->setDefault('gateway_configs', function (OptionsResolver $subResolver): void {
+        $this->setNestedOptions($resolver, 'gateway_configs', function (OptionsResolver $subResolver): void {
             $subResolver->setDefault('test_mode', false)
                 ->setAllowedTypes('test_mode', 'boolean');
             $subResolver->setDefault('disable_3d_hash_check', false)
@@ -87,6 +87,19 @@ abstract class AbstractGatewayDefinitionBuilder implements GatewayDefinitionBuil
     protected function getOptionalEndpoints(): array
     {
         return ['gateway_3d_host'];
+    }
+
+    /**
+     * Uses setOptions() (Symfony >=7.3) when available, falls back to setDefault() for older versions.
+     * setDefault() with a nested OptionsResolver closure was removed in Symfony 8.0.
+     */
+    protected function setNestedOptions(OptionsResolver $resolver, string $name, \Closure $configurator): void
+    {
+        if (\method_exists($resolver, 'setOptions')) {
+            $resolver->setOptions($name, $configurator);
+        } else {
+            $resolver->setDefault($name, $configurator);
+        }
     }
 
     private function ensureRequiredExtensionsAvailable(string $name): void

@@ -24,7 +24,7 @@ class ToslaPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefault('credentials', function (OptionsResolver $subResolver): void {
+        $this->setNestedOptions($resolver, 'credentials', function (OptionsResolver $subResolver): void {
             $subResolver
                 ->setRequired('user_name')
                 ->setAllowedTypes('user_name', ['int', 'string']);

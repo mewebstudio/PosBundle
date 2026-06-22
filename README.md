@@ -14,7 +14,7 @@
 ## Minimum Gereksinimler
   - PHP >= 7.4
   - mews/pos ^1.7
-  - Symfony 4|5|6|7
+  - Symfony 4|5|6|7|8
 
 ## Kurulum
 1. 
