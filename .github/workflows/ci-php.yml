@@ -1,21 +1,35 @@
-name: Unit Tests
+name: Tests
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
 
 jobs:
   test:
-
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
-        php: ['7.4', '8.2']
+        php: ['7.4', '8.1', '8.2', '8.3', '8.4']
         dependency-version: [prefer-stable]
+
+    name: PHP ${{ matrix.php }}
+
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v7
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: soap
+          coverage: none
 
       - name: Install dependencies
-        run: composer install --no-suggest
+        run: composer install --no-interaction --prefer-dist
 
-      - name: Run integration test suite
+      - name: Run unit tests
+        run: vendor/bin/simple-phpunit --testsuite=unit
+
+      - name: Run integration tests
         run: vendor/bin/simple-phpunit --testsuite=integration
