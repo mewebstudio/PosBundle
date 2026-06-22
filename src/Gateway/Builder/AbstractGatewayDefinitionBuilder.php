@@ -92,9 +92,9 @@ abstract class AbstractGatewayDefinitionBuilder implements GatewayDefinitionBuil
     private function ensureRequiredExtensionsAvailable(string $name): void
     {
         $missingExtensions = [];
-        foreach ($this->getRequiredExtensions() as $requiredClass => $extension) {
-            if (!\class_exists($requiredClass)) {
-                $missingExtensions[] = $extension;
+        foreach ($this->getRequiredExtensions() as $extensionName => $displayName) {
+            if (!\extension_loaded($extensionName)) {
+                $missingExtensions[] = $displayName;
             }
         }
 
