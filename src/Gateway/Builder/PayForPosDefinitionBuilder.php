@@ -2,18 +2,15 @@
 
 namespace Mews\PosBundle\Gateway\Builder;
 
-use Mews\Pos\Entity\Account\PayForAccount;
-use Mews\Pos\Gateways\PayForPos;
+use Mews\Pos\Gateway\PayForPos;
+use Mews\Pos\Model\Account\PayForPosAccount;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PayForPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
 {
-    /**
-     * @inheritDoc
-     */
     public function supports(string $gatewayClass): bool
     {
-        return \in_array($gatewayClass, [PayForPos::class], true);
+        return PayForPos::class === $gatewayClass;
     }
 
     protected function getRequiredExtensions(): array
@@ -32,9 +29,11 @@ class PayForPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
             $subResolver
                 ->setRequired('user_password')
                 ->setAllowedTypes('user_password', ['int', 'string']);
+            $subResolver->setDefined('secret_key')
+                ->setAllowedTypes('secret_key', ['int', 'string']);
             $subResolver
                 ->setDefined('mbr_id')
-                ->setDefault('mbr_id', PayForAccount::MBR_ID_FINANSBANK)
+                ->setDefault('mbr_id', PayForPosAccount::MBR_ID_FINANSBANK)
                 ->setAllowedTypes('mbr_id', ['int', 'string']);
         });
     }

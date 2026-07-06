@@ -2,14 +2,17 @@
 
 namespace Mews\PosBundle\Gateway\Builder;
 
-use Mews\Pos\Gateway\GarantiPos;
+use Mews\Pos\Gateway\AssecoPos;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class GarantiPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
+class AssecoPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
 {
+    /**
+     * @inheritDoc
+     */
     public function supports(string $gatewayClass): bool
     {
-        return GarantiPos::class === $gatewayClass;
+        return AssecoPos::class === $gatewayClass;
     }
 
     protected function getRequiredExtensions(): array
@@ -25,20 +28,11 @@ class GarantiPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
             $subResolver->setRequired([
                 'user_name',
                 'user_password',
-                'terminal_id',
             ]);
             $subResolver->setAllowedTypes('user_name', ['int', 'string']);
             $subResolver->setAllowedTypes('user_password', ['int', 'string']);
-            $subResolver->setAllowedTypes('terminal_id', ['int', 'string']);
-
             $subResolver->setDefined('secret_key')
                 ->setAllowedTypes('secret_key', ['int', 'string']);
-            $subResolver->setDefined([
-                'refund_user_name',
-                'refund_user_password',
-            ]);
-            $subResolver->setAllowedTypes('refund_user_name', ['int', 'string']);
-            $subResolver->setAllowedTypes('refund_user_password', ['int', 'string']);
         });
     }
 

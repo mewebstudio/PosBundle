@@ -2,7 +2,7 @@
 
 namespace Mews\PosBundle\Gateway\Builder;
 
-use Mews\Pos\Gateways\InterPos;
+use Mews\Pos\Gateway\InterPos;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class InterPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
@@ -12,9 +12,8 @@ class InterPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
      */
     public function supports(string $gatewayClass): bool
     {
-        return \in_array($gatewayClass, [InterPos::class], true);
+        return InterPos::class === $gatewayClass;
     }
-
 
     protected function getRequiredExtensions(): array
     {
@@ -32,8 +31,9 @@ class InterPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
             ]);
             $subResolver->setAllowedTypes('user_name', ['int', 'string']);
             $subResolver->setAllowedTypes('user_password', ['int', 'string']);
+            $subResolver->setDefined('secret_key')
+                ->setAllowedTypes('secret_key', ['int', 'string']);
         });
-
     }
 
     protected function getRequiredEndpoints(): array

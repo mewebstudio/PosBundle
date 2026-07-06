@@ -2,7 +2,7 @@
 
 namespace Mews\PosBundle\Gateway\Builder;
 
-use Mews\Pos\Gateways\ParamPos;
+use Mews\Pos\Gateway\ParamPos;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ParamPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
@@ -12,7 +12,7 @@ class ParamPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
      */
     public function supports(string $gatewayClass): bool
     {
-        return \in_array($gatewayClass, [ParamPos::class], true);
+        return ParamPos::class === $gatewayClass;
     }
 
     protected function getRequiredExtensions(): array
@@ -28,15 +28,13 @@ class ParamPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
             $subResolver->setRequired([
                 'user_name',
                 'user_password',
+                'secret_key',
             ]);
             $subResolver->setAllowedTypes('user_name', ['int', 'string']);
             $subResolver->setAllowedTypes('user_password', ['int', 'string']);
+            $subResolver->setAllowedTypes('secret_key', ['int', 'string']);
+            $subResolver->setDefined('terminal_id')
+                ->setAllowedTypes('terminal_id', ['int', 'string']);
         });
-
-    }
-
-    protected function getOptionalEndpoints(): array
-    {
-        return \array_merge(parent::getOptionalEndpoints(), ['payment_api_2']);
     }
 }

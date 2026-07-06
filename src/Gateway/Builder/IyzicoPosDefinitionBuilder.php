@@ -2,17 +2,14 @@
 
 namespace Mews\PosBundle\Gateway\Builder;
 
-use Mews\Pos\Gateway\PayFlexCPV4Pos;
+use Mews\Pos\Gateway\IyzicoPos;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class PayFlexCPV4PosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
+class IyzicoPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
 {
-    /**
-     * @inheritDoc
-     */
     public function supports(string $gatewayClass): bool
     {
-        return PayFlexCPV4Pos::class === $gatewayClass;
+        return IyzicoPos::class === $gatewayClass;
     }
 
     protected function getRequiredExtensions(): array
@@ -25,16 +22,17 @@ class PayFlexCPV4PosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
         parent::configureOptions($resolver);
 
         $this->setNestedOptions($resolver, 'credentials', function (OptionsResolver $subResolver): void {
-            $subResolver->setRequired([
-                'terminal_id',
-                'user_password',
-            ]);
-            $subResolver->setAllowedTypes('terminal_id', ['int', 'string']);
-            $subResolver->setAllowedTypes('user_password', ['int', 'string']);
-
+            $subResolver
+                ->setRequired('secret_key')
+                ->setAllowedTypes('secret_key', ['string']);
             $subResolver
                 ->setDefined('sub_merchant_id')
                 ->setAllowedTypes('sub_merchant_id', ['string']);
         });
+    }
+
+    protected function getRequiredEndpoints(): array
+    {
+        return \array_merge(parent::getRequiredEndpoints(), ['query_api']);
     }
 }

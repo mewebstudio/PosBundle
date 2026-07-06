@@ -2,17 +2,14 @@
 
 namespace Mews\PosBundle\Gateway\Builder;
 
-use Mews\Pos\Gateways\AkbankPos;
+use Mews\Pos\Gateway\AkbankPos;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class AkbankPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
 {
-    /**
-     * @inheritDoc
-     */
     public function supports(string $gatewayClass): bool
     {
-        return \in_array($gatewayClass, [AkbankPos::class], true);
+        return AkbankPos::class === $gatewayClass;
     }
 
     protected function getRequiredExtensions(): array
@@ -29,10 +26,12 @@ class AkbankPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
                 ->setRequired('terminal_id')
                 ->setAllowedTypes('terminal_id', ['string', 'int']);
             $subResolver
+                ->setRequired('secret_key')
+                ->setAllowedTypes('secret_key', ['string', 'int']);
+            $subResolver
                 ->setDefined('sub_merchant_id')
                 ->setAllowedTypes('sub_merchant_id', ['string', 'int']);
         });
-
     }
 
     protected function getRequiredEndpoints(): array

@@ -2,7 +2,7 @@
 
 namespace Mews\PosBundle\Gateway\Builder;
 
-use Mews\Pos\Gateways\PayFlexV4Pos;
+use Mews\Pos\Gateway\PayFlexV4Pos;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PayFlexV4PosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
@@ -35,9 +35,6 @@ class PayFlexV4PosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
             $subResolver
                 ->setDefined('sub_merchant_id')
                 ->setAllowedTypes('sub_merchant_id', ['string']);
-
-            // enc_key is not used, we set it to empty string by default.
-            $subResolver->setDefault('enc_key', '');
         });
     }
 

@@ -43,3 +43,12 @@ services:
 
   test.mews_pos.gateway.parampos:
     alias: mews_pos.gateway.parampos
+
+  test.mews_pos.gateway.param3dhostpos:
+    alias: mews_pos.gateway.param3dhostpos
+
+  test.mews_pos.gateway.iyzicopos:
+    alias: mews_pos.gateway.iyzicopos
+
+  test.mews_pos.gateway.paytrpos:
+    alias: mews_pos.gateway.paytrpos

@@ -2,8 +2,7 @@
 
 namespace Mews\PosBundle\Tests\Unit\Gateway\Builder;
 
-use Mews\Pos\Gateways\EstV3Pos;
-use Mews\Pos\PosInterface;
+use Mews\Pos\Gateway\AssecoPos;
 use Mews\PosBundle\Exception\MissingExtensionException;
 use Mews\PosBundle\Gateway\Builder\AbstractGatewayDefinitionBuilder;
 use PHPUnit\Framework\TestCase;
@@ -27,13 +26,11 @@ class AbstractGatewayDefinitionBuilderTest extends TestCase
         $this->expectExceptionMessage('ext-nonexistent');
 
         $builder->createDefinition('test', [
-            'gateway_class'     => EstV3Pos::class,
+            'gateway_class'     => AssecoPos::class,
             'credentials'       => [
-                'payment_model' => PosInterface::MODEL_3D_SECURE,
                 'merchant_id'   => '123',
                 'user_name'     => 'user',
                 'user_password' => 'pass',
-                'enc_key'       => 'key',
             ],
             'gateway_endpoints' => [
                 'payment_api' => 'https://api.example.com',

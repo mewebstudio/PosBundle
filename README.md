@@ -1,4 +1,4 @@
-# Türk bankaları için sanal pos paketi (Symfony 4|5|6|7)
+# Türk bankaları için sanal pos paketi (Symfony 4|5|6|7|8)
 
 ## Temel Paket
 [mews/pos](https://github.com/mewebstudio/pos)
@@ -12,8 +12,8 @@
 - [API ve 3D Form verisini degiştirme](./docs/EXAMPLE-API-ISTEK-VE-3D-FORM-VERSINI-DEGISTIRME.md)
 
 ## Minimum Gereksinimler
-  - PHP >= 7.4
-  - mews/pos ^1.7
+  - PHP >= 8.0
+  - mews/pos ^2.0
   - Symfony 4|5|6|7|8
 
 ## Kurulum
@@ -26,29 +26,27 @@
    ```yaml
    mews_pos:
      banks:
-       estpos: # herhangi unique bir isim
-         gateway_class: Mews\Pos\Gateways\EstV3Pos
-         lang: !php/const Mews\Pos\PosInterface::LANG_TR # optional
+       asseco: # herhangi unique bir isim
+         gateway_class: Mews\Pos\Gateway\AssecoPos
          credentials:
-           payment_model: !php/const Mews\Pos\PosInterface::MODEL_3D_SECURE
            merchant_id: 700xxxxxx
-           user_name: ISXXXXXX #EstPos: kullanici adi
-           user_password: ISYYYYY #EstPos: kullanici sifresi
-           enc_key: TRPXXXXX
+           user_name: ISXXXXXX #AssecoPos: kullanici adi
+           user_password: ISYYYYY #AssecoPos: kullanici sifresi
+           secret_key: TRPXXXXX
          gateway_endpoints: # ilgili ortamin (test/prod) URL'leriyle degistiriniz:
-           payment_api: 'https://entegrasyon.asseco-see.com.tr/fim/api' 
+           payment_api: 'https://entegrasyon.asseco-see.com.tr/fim/api'
            gateway_3d: 'https://entegrasyon.asseco-see.com.tr/fim/est3Dgate'
            gateway_3d_host: 'https://sanalpos.sanalakpos.com.tr/fim/est3Dgate' # optional, 3D Host ödemeler için zorunlu
          gateway_configs:
-          test_mode: false #optional, default: false;
+           test_mode: false     # optional, default: false
+           lang: tr             # optional, default: tr
        yapikredi:
-         gateway_class: Mews\Pos\Gateways\PosNet
+         gateway_class: Mews\Pos\Gateway\PosNetPos
          credentials:
-           payment_model: !php/const Mews\Pos\PosInterface::MODEL_3D_SECURE
            merchant_id: 670XXXXXXX # Üye İşyeri Numarası.
-           terminal_id: 67XXXXXX # Üye İşyeri Terminal Numaras
+           terminal_id: 67XXXXXX # Üye İşyeri Terminal Numarası
            user_name: 27XXX # Üye İşyeri POSNET Numarası
-           enc_key: 10,92,92,02,02,02,02,02,01 # Şifreleme anahtar
+           secret_key: 10,92,92,02,02,02,02,02,01 # Şifreleme anahtar
          gateway_endpoints:
            payment_api: 'https://setmpos.ykb.com/PosnetWebService/XML'
            gateway_3d: 'https://setmpos.ykb.com/3DSWebService/YKBPaymentService'
@@ -65,7 +63,7 @@ use Mews\Pos\Exceptions\CardTypeNotSupportedException;
 use Mews\Pos\Exceptions\CardTypeRequiredException;
 use Mews\Pos\Exceptions\HashMismatchException;
 use Mews\Pos\Factory\CreditCardFactory;
-use Mews\Pos\Gateways\PayFlexV4Pos;
+use Mews\Pos\Gateway\PayFlexV4Pos;
 use Mews\Pos\PosInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
@@ -98,7 +96,7 @@ class SingleBankThreeDSecurePaymentController extends AbstractController
     )
     {
 //        foreach ($this->banks as $bank) {
-//            if ('estpos' === $bank->getAccount()->getBank()) {
+//            if ('asseco' === $bank->getAccount()->getBankName()) {
 //               // todo
 //            }
 //        }
@@ -138,19 +136,27 @@ class SingleBankThreeDSecurePaymentController extends AbstractController
 
         try {
             $formData = $this->pos->get3DFormData(
-            $order,
-            $this->paymentModel,
-            $transaction,
-            $card,
-            /**
-            * MODEL_3D_SECURE veya MODEL_3D_PAY ödemelerde kredi kart verileri olmadan
-            * form verisini oluşturmak için true yapabilirsiniz.
-            * Yine de bazı gatewaylerde kartsız form verisi oluşturulamıyor.
-            */
-            false
+                $order,
+                $this->paymentModel,
+                $transaction,
+                $card,
+                /**
+                 * MODEL_3D_SECURE veya MODEL_3D_PAY ödemelerde kredi kart verileri olmadan
+                 * form verisini oluşturmak için true yapabilirsiniz.
+                 * Yine de bazı gatewaylerde kartsız form verisi oluşturulamıyor.
+                 */
+                false
             );
         } catch (\Throwable $e) {
             dd($e);
+        }
+
+        /**
+         * Bazı 3D Host gateway'leri (VakifKatilimPos, KuveytPos, vb.) doğrudan bir yönlendirme URL'i döner:
+         * method=GET ve inputs=[]. Bu durumda HTML form render etmek yerine doğrudan yönlendiriyoruz.
+         */
+        if (!is_string($formData) && $formData['method'] === 'GET' && [] === $formData['inputs']) {
+            return new RedirectResponse($formData['gateway']);
         }
 
         return $this->render('redirect-form.html.twig', [
@@ -172,13 +178,13 @@ class SingleBankThreeDSecurePaymentController extends AbstractController
         // bankadan POST veya GET ile veri gelmesi gerekiyor
         if (($request->getMethod() !== 'POST')
             // PayFlex-CP GET request ile cevapliyor
-            && ($request->getMethod() === 'GET' && ($this->pos::class !== \Mews\Pos\Gateways\PayFlexCPV4Pos::class || [] === $request->query->all()))
+            && ($request->getMethod() === 'GET' && ($this->pos::class !== \Mews\Pos\Gateway\PayFlexCPV4Pos::class || [] === $request->query->all()))
         ) {
             return new RedirectResponse($request->getBaseUrl());
         }
 
         $card = null;
-        if ($this->pos::class === \Mews\Pos\Gateways\PayFlexV4Pos::class) {
+        if ($this->pos::class === \Mews\Pos\Gateway\PayFlexV4Pos::class) {
             // bu gateway için ödemeyi tamamlarken tekrar kart bilgisi lazım.
             $savedCard = $session->get('card');
             $card      = $this->createCard($this->pos, $savedCard);
@@ -190,8 +196,13 @@ class SingleBankThreeDSecurePaymentController extends AbstractController
             throw new \Exception('Sipariş bulunamadı, session sıfırlanmış olabilir.');
         }
 
+        // PayFlexCPV4 GET ile cevap veriyor, diğerleri POST
+        $gatewayResponseData = $this->pos::class === \Mews\Pos\Gateway\PayFlexCPV4Pos::class
+            ? $request->query->all()
+            : $request->request->all();
+
         try {
-            $this->pos->payment($this->paymentModel, $order, $transaction, $card);
+            $response = $this->pos->payment($this->paymentModel, $order, $transaction, $card, $gatewayResponseData);
         } catch (HashMismatchException $e) {
             /**
              * Bankadan gelen verilerin bankaya ait olmadığında bu exception oluşur.
@@ -207,7 +218,7 @@ class SingleBankThreeDSecurePaymentController extends AbstractController
 
         if ($this->pos->isSuccess()) {
             echo 'success';
-            dd($this->pos->getResponse());
+            dd($response);
         } else {
             dd($response);
         }
@@ -229,7 +240,7 @@ class SingleBankThreeDSecurePaymentController extends AbstractController
             'amount'      => 10.01,
             'currency'    => $currency,
             'installment' => $installment,
-            'ip'          => \filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 ) ? $ip : '127.0.0.1',
+            'ip'          => \filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) ? $ip : '127.0.0.1',
         ];
 
         if (\in_array($paymentModel, [
@@ -243,7 +254,6 @@ class SingleBankThreeDSecurePaymentController extends AbstractController
         }
 
         if ($lang) {
-            //lang degeri verilmezse account (EstPosAccount) dili kullanilacak
             $order['lang'] = $lang;
         }
 
@@ -284,6 +294,9 @@ class SingleBankThreeDSecurePaymentController extends AbstractController
          <button type="submit" class="btn btn-lg btn-block btn-success">Submit</button>
       </div>
    </form>
+<script>
+   document.querySelector('form.redirect-form').submit();
+</script>
 {% else %}
     {{ formData | raw }}
 {% endif %}
@@ -298,57 +311,6 @@ framework:
         cookie_secure: true
         cookie_samesite: none
 ```
-
-KuveytPos TDV2.0.0 için ekstra veri eklemek zorunludur.
-Bunun EventListener ile yapabilirsiniz:
-```php
-<?php
-
-namespace App\EventListener;
-
-use Mews\Pos\Event\RequestDataPreparedEvent;
-use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
-
-/**
- * KuveytPos TDV2.0.0 odemenin calismasi icin zorunlu eklenmesi gereken alan var.
- */
-#[AsEventListener(event: RequestDataPreparedEvent::class)]
-final class KuveytPosV2RequestDataPreparedEventListener
-{
-    public function __invoke(RequestDataPreparedEvent $event): void
-    {
-        if ($event->getGatewayClass() !== \Mews\Pos\Gateways\KuveytPos::class) {
-            return;
-        }
-
-        /**
-         * ekstra eklenmesi gereken verileri isteseniz $order icine ekleyip sonra o verilere
-         * $event->getOrder() ile erisebilirsiniz.
-         */
-        $additionalRequestDataForKuveyt = [
-            'DeviceData'     => [
-                'DeviceChannel' => '02',
-            ],
-            'CardHolderData' => [
-                'BillAddrCity'     => 'İstanbul',
-                'BillAddrCountry'  => '792',
-                'BillAddrLine1'    => 'XXX Mahallesi XXX Caddesi No 55 Daire 1',
-                'BillAddrPostCode' => '34000',
-                'BillAddrState'    => '40',
-                'Email'            => 'xxxxx@gmail.com',
-                'MobilePhone'      => [
-                    'Cc'         => '90',
-                    'Subscriber' => '1234567899',
-                ],
-            ],
-        ];
-        $requestData                    = $event->getRequestData();
-        $requestData                    = \array_merge_recursive($requestData, $additionalRequestDataForKuveyt);
-        $event->setRequestData($requestData);
-    }
-}
-```
-
 
 License
 ----

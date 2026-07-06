@@ -2,7 +2,7 @@
 
 namespace Mews\PosBundle\Gateway\Builder;
 
-use Mews\Pos\Gateways\ToslaPos;
+use Mews\Pos\Gateway\ToslaPos;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ToslaPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
@@ -12,7 +12,7 @@ class ToslaPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
      */
     public function supports(string $gatewayClass): bool
     {
-        return \in_array($gatewayClass, [ToslaPos::class], true);
+        return ToslaPos::class === $gatewayClass;
     }
 
     protected function getRequiredExtensions(): array
@@ -28,6 +28,9 @@ class ToslaPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
             $subResolver
                 ->setRequired('user_name')
                 ->setAllowedTypes('user_name', ['int', 'string']);
+            $subResolver
+                ->setRequired('secret_key')
+                ->setAllowedTypes('secret_key', ['int', 'string']);
             $subResolver
                 ->setDefined('sub_merchant_id')
                 ->setAllowedTypes('sub_merchant_id', ['int', 'string']);

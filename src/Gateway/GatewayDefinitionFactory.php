@@ -15,18 +15,21 @@ class GatewayDefinitionFactory
     public function __construct()
     {
         $this->builders = [
-            new Builder\EstV3PosDefinitionBuilder(),
+            new Builder\AssecoPosDefinitionBuilder(),
             new Builder\GarantiPosDefinitionBuilder(),
             new Builder\InterPosDefinitionBuilder(),
             new Builder\KuveytPosDefinitionBuilder(),
             new Builder\VakifKatilimPosDefinitionBuilder(),
             new Builder\ParamPosDefinitionBuilder(),
+            new Builder\Param3DHostPosDefinitionBuilder(),
             new Builder\PayFlexCPV4PosDefinitionBuilder(),
             new Builder\PayFlexV4PosDefinitionBuilder(),
             new Builder\PayForPosDefinitionBuilder(),
             new Builder\PosNetPosDefinitionBuilder(),
             new Builder\AkbankPosDefinitionBuilder(),
             new Builder\ToslaPosDefinitionBuilder(),
+            new Builder\IyzicoPosDefinitionBuilder(),
+            new Builder\PayTrPosDefinitionBuilder(),
         ];
     }
 

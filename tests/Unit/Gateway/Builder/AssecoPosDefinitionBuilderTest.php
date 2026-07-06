@@ -2,36 +2,33 @@
 
 namespace Mews\PosBundle\Tests\Unit\Gateway\Builder;
 
-use Mews\Pos\Gateways\EstV3Pos;
-use Mews\Pos\PosInterface;
-use Mews\PosBundle\Gateway\Builder\EstV3PosDefinitionBuilder;
+use Mews\Pos\Gateway\AssecoPos;
+use Mews\PosBundle\Gateway\Builder\AssecoPosDefinitionBuilder;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 
 /**
- * @covers \Mews\PosBundle\Gateway\Builder\EstV3PosDefinitionBuilder
+ * @covers \Mews\PosBundle\Gateway\Builder\AssecoPosDefinitionBuilder
  * @covers \Mews\PosBundle\Gateway\Builder\AbstractGatewayDefinitionBuilder
  */
-class EstV3PosDefinitionBuilderTest extends TestCase
+class AssecoPosDefinitionBuilderTest extends TestCase
 {
-    private EstV3PosDefinitionBuilder $builder;
+    private AssecoPosDefinitionBuilder $builder;
 
     protected function setUp(): void
     {
-        $this->builder = new EstV3PosDefinitionBuilder();
+        $this->builder = new AssecoPosDefinitionBuilder();
     }
 
     private function validOptions(): array
     {
         return [
-            'gateway_class'     => EstV3Pos::class,
+            'gateway_class'     => AssecoPos::class,
             'credentials'       => [
-                'payment_model' => PosInterface::MODEL_3D_SECURE,
                 'merchant_id'   => 'merchant',
                 'user_name'     => 'user',
                 'user_password' => 'pass',
-                'enc_key'       => 'key',
+                'secret_key'    => 'key',
             ],
             'gateway_endpoints' => [
                 'payment_api' => 'https://api.example.com',
@@ -44,6 +41,11 @@ class EstV3PosDefinitionBuilderTest extends TestCase
     {
         $definition = $this->builder->createDefinition('estpos', $this->validOptions());
         $this->assertNotNull($definition);
+    }
+
+    public function testSupportsAssecoPos(): void
+    {
+        $this->assertTrue($this->builder->supports(AssecoPos::class));
     }
 
     public function testThrowsWhenPaymentApiMissing(): void
@@ -79,15 +81,6 @@ class EstV3PosDefinitionBuilderTest extends TestCase
         unset($options['credentials']['user_password']);
 
         $this->expectException(MissingOptionsException::class);
-        $this->builder->createDefinition('estpos', $options);
-    }
-
-    public function testThrowsWhenPaymentModelIsInvalid(): void
-    {
-        $options = $this->validOptions();
-        $options['credentials']['payment_model'] = 'invalid_model';
-
-        $this->expectException(InvalidOptionsException::class);
         $this->builder->createDefinition('estpos', $options);
     }
 }

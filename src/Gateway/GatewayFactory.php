@@ -2,11 +2,8 @@
 
 namespace Mews\PosBundle\Gateway;
 
-use Mews\Pos\Factory\CryptFactory;
-use Mews\Pos\Factory\HttpClientFactory;
-use Mews\Pos\Factory\RequestDataMapperFactory;
-use Mews\Pos\Factory\ResponseDataMapperFactory;
-use Mews\Pos\Factory\SerializerFactory;
+use Mews\Pos\Factory\AccountFactory as MewsPosAccountFactory;
+use Mews\Pos\Factory\PosFactory;
 use Mews\Pos\PosInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Client\ClientInterface;
@@ -20,55 +17,26 @@ class GatewayFactory
         EventDispatcherInterface $eventDispatcher,
         LoggerInterface          $logger,
         ClientInterface          $client
-    ): PosInterface
-    {
-        $credentials    = $options['credentials'];
-        $gatewayClass   = $options['gateway_class'];
-        $gatewayConfigs = $options['gateway_configs'] ?? [];
-        if (!\in_array(PosInterface::class, \class_implements($gatewayClass), true)) {
-            throw new \InvalidArgumentException(
-                \sprintf('gateway_class must be implementation of %s', PosInterface::class)
-            );
-        }
-
-        $account            = AccountFactory::createAccount(
-            $gatewayClass,
+    ): PosInterface {
+        $account = MewsPosAccountFactory::createForGateway(
+            $options['gateway_class'],
             $name,
-            $credentials,
-            $options['lang']
+            $options['credentials']
         );
-        $crypt              = CryptFactory::createGatewayCrypt($gatewayClass, $logger);
-        $requestDataMapper  = RequestDataMapperFactory::createGatewayRequestMapper(
-            $gatewayClass,
+
+        $config = [
+            'class'             => $options['gateway_class'],
+            'gateway_endpoints' => $options['gateway_endpoints'],
+            'gateway_configs'   => $options['gateway_configs'] ?? [],
+        ];
+
+        return PosFactory::create(
+            $account,
+            $config,
             $eventDispatcher,
-            $crypt
-        );
-        $responseDataMapper = ResponseDataMapperFactory::createGatewayResponseMapper(
-            $gatewayClass,
-            $requestDataMapper,
+            null,
+            $client,
             $logger
         );
-        $serializer         = SerializerFactory::createGatewaySerializer($gatewayClass);
-
-        /** @var PosInterface $gateway */
-        $gateway = new $gatewayClass(
-            [
-                'gateway_endpoints' => $options['gateway_endpoints'],
-                'gateway_configs' => $gatewayConfigs,
-            ],
-            $account,
-            $requestDataMapper,
-            $responseDataMapper,
-            $serializer,
-            $eventDispatcher,
-            HttpClientFactory::createHttpClient($client),
-            $logger,
-        );
-
-        if (!isset($gatewayConfigs['test_mode']) && isset($options['test_mode'])) {
-            $gateway->setTestMode($options['test_mode']);
-        }
-
-        return $gateway;
     }
 }
