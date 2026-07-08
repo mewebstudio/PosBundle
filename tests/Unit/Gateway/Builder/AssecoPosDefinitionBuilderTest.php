@@ -39,7 +39,7 @@ class AssecoPosDefinitionBuilderTest extends TestCase
 
     public function testCreatesDefinitionWithValidOptions(): void
     {
-        $definition = $this->builder->createDefinition('estpos', $this->validOptions());
+        $definition = $this->builder->createDefinition('asseco', $this->validOptions());
         $this->assertNotNull($definition);
     }
 
@@ -54,7 +54,7 @@ class AssecoPosDefinitionBuilderTest extends TestCase
         unset($options['gateway_endpoints']['payment_api']);
 
         $this->expectException(MissingOptionsException::class);
-        $this->builder->createDefinition('estpos', $options);
+        $this->builder->createDefinition('asseco', $options);
     }
 
     public function testThrowsWhenGateway3dMissing(): void
@@ -63,7 +63,7 @@ class AssecoPosDefinitionBuilderTest extends TestCase
         unset($options['gateway_endpoints']['gateway_3d']);
 
         $this->expectException(MissingOptionsException::class);
-        $this->builder->createDefinition('estpos', $options);
+        $this->builder->createDefinition('asseco', $options);
     }
 
     public function testThrowsWhenUserNameMissing(): void
@@ -72,7 +72,7 @@ class AssecoPosDefinitionBuilderTest extends TestCase
         unset($options['credentials']['user_name']);
 
         $this->expectException(MissingOptionsException::class);
-        $this->builder->createDefinition('estpos', $options);
+        $this->builder->createDefinition('asseco', $options);
     }
 
     public function testThrowsWhenUserPasswordMissing(): void
@@ -81,6 +81,6 @@ class AssecoPosDefinitionBuilderTest extends TestCase
         unset($options['credentials']['user_password']);
 
         $this->expectException(MissingOptionsException::class);
-        $this->builder->createDefinition('estpos', $options);
+        $this->builder->createDefinition('asseco', $options);
     }
 }

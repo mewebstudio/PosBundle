@@ -1,6 +1,6 @@
 mews_pos:
   banks:
-    estpos:
+    asseco:
       gateway_class: Mews\Pos\Gateway\AssecoPos
       credentials:
         merchant_id: 700XXXXXXXX

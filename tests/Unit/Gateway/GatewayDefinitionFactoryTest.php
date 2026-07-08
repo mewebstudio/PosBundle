@@ -30,7 +30,7 @@ class GatewayDefinitionFactoryTest extends TestCase
 
     public function testCreateDefinitionReturnsDefinitionForKnownGatewayClass(): void
     {
-        $definition = $this->factory->createDefinition('estpos', [
+        $definition = $this->factory->createDefinition('asseco', [
             'gateway_class'     => AssecoPos::class,
             'credentials'       => [
                 'merchant_id'   => '700XXX',

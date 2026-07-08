@@ -10,6 +10,7 @@
 - [Ornek 3D Secure Odeme](#farkli-banka-sanal-poslarini-eklemek)
 - [Konfigurasyon Yapısı ve Örnekler](./docs/EXAMPLE_CONFIGURATIONS.md)
 - [API ve 3D Form verisini degiştirme](./docs/EXAMPLE-API-ISTEK-VE-3D-FORM-VERSINI-DEGISTIRME.md)
+- [PosQuery Servisleri (geçmiş, taksit, BIN sorguları)](./docs/POS-QUERY.md)
 
 ## Minimum Gereksinimler
   - PHP >= 8.0

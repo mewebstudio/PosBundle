@@ -27,12 +27,12 @@ class GatewaysTest extends KernelTestCase
         }
     }
 
-    public function testEstPos(): void
+    public function testAssecoPos(): void
     {
-        $pos = $this->testContainer->get('test.mews_pos.gateway.estpos');
+        $pos = $this->testContainer->get('test.mews_pos.gateway.asseco');
         $this->assertInstanceOf(\Mews\Pos\Gateway\AssecoPos::class, $pos);
 
-        $this->assertSame('estpos', $pos->getAccount()->getBankName());
+        $this->assertSame('asseco', $pos->getAccount()->getBankName());
         $this->assertSame('700XXXXXXXX', $pos->getAccount()->getMerchantId());
         $this->assertSame('ISBYYYY', $pos->getAccount()->getUsername());
         $this->assertSame('ISZZZZZ', $pos->getAccount()->getPassword());
@@ -41,7 +41,7 @@ class GatewaysTest extends KernelTestCase
         $this->assertSame(false, $pos->isTestMode());
     }
 
-    public function testPosNet(): void
+    public function testPosNetPos(): void
     {
         $pos = $this->testContainer->get('test.mews_pos.gateway.yapikredi');
         $this->assertInstanceOf(\Mews\Pos\Gateway\PosNetPos::class, $pos);
