@@ -17,14 +17,7 @@ class GatewaysTest extends KernelTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        // getContainer() was added in Symfony 5.3; older versions require bootKernel() first
-        if (method_exists(static::class, 'getContainer')) {
-            $this->testContainer = static::getContainer();
-        } else {
-            // todo remove this when dropping support for Symfony 4
-            static::bootKernel();
-            $this->testContainer = static::$kernel->getContainer();
-        }
+        $this->testContainer = static::getContainer();
     }
 
     public function testAssecoPos(): void

@@ -3,6 +3,7 @@
 ## [2.0.0] - 2026-07-??
 
 ### Kırıcı Değişiklikler
+- **Symfony v4 desteği kaldırıldı;** minimum desteklenen Symfony sürümü v5.4'tür
 - **PHP minimum sürümü** `>=7.4` → `>=8.0`
 - **mews/pos** `^1.x` → `^2.0`
 - **Konfigurasyon — `credentials`:** `enc_key` alanı `secret_key` olarak yeniden adlandırıldı

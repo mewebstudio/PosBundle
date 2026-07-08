@@ -7,13 +7,19 @@ Bu kılavuz, `mews/pos-bundle` v1.x'ten v2.0'a geçiş için Symfony uygulamanı
 
 ---
 
-## 1. PHP Sürümü
+## 1. Symfony Sürümü
+
+Symfony v4 desteği kaldırıldı. Minimum desteklenen Symfony sürümü **v5.4**'tür.
+
+---
+
+## 2. PHP Sürümü
 
 Minimum PHP sürümü `>=7.4` → `>=8.0` olarak güncellendi.
 
 ---
 
-## 2. `composer.json` güncellemesi
+## 3. `composer.json` güncellemesi
 
 ```bash
 composer require mews/pos-bundle:^2.0
@@ -21,7 +27,7 @@ composer require mews/pos-bundle:^2.0
 
 ---
 
-## 3. Konfigurasyon değişiklikleri
+## 4. Konfigurasyon değişiklikleri
 
 ### 3.1 `enc_key` → `secret_key`
 
@@ -146,7 +152,7 @@ kuveytpos:
 
 ---
 
-## 4. Gateway sınıf adları
+## 5. Gateway sınıf adları
 
 ### 4.1 Namespace değişikliği
 
@@ -170,7 +176,7 @@ gateway_class: Mews\Pos\Gateway\GarantiPos
 
 ---
 
-## 5. PHP sabit referansları
+## 6. PHP sabit referansları
 
 YAML konfigurasyonunda kullandığınız PHP sabit referanslarını güncelleyin:
 
@@ -184,7 +190,7 @@ mbr_id: !php/const Mews\Pos\Model\Account\PayForPosAccount::MBR_ID_FINANSBANK
 
 ---
 
-## 6. Yeni gateway'ler
+## 7. Yeni gateway'ler
 
 v2.0 ile üç yeni gateway desteği eklendi:
 
@@ -229,7 +235,7 @@ paytrpos:
 
 ---
 
-## 7. PHP kodu değişiklikleri
+## 8. PHP kodu değişiklikleri
 
 ### `PosInterface` metodları
 

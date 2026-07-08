@@ -1,4 +1,4 @@
-# Türk bankaları için sanal pos paketi (Symfony 4|5|6|7|8)
+# Türk bankaları için sanal pos paketi (Symfony 5|6|7|8)
 
 ## Temel Paket
 [mews/pos](https://github.com/mewebstudio/pos)
@@ -15,7 +15,7 @@
 ## Minimum Gereksinimler
   - PHP >= 8.0
   - mews/pos ^2.0
-  - Symfony 4|5|6|7|8
+  - Symfony 5|6|7|8
 
 ## Kurulum
 1. 

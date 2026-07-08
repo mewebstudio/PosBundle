@@ -35,11 +35,11 @@
         "php": ">=8.0",
         "mews/pos": "^2.0",
         "psr/event-dispatcher": "^1.0",
-        "symfony/config": "^4.0 | ^5.0 | ^6.0 | ^7.0 | ^8.0",
-        "symfony/dependency-injection": "^4.0 | ^5.0 | ^6.0 | ^7.0 | ^8.0",
-        "symfony/event-dispatcher": "^4.0 | ^5.0 | ^6.0 | ^7.0 | ^8.0",
-        "symfony/http-kernel": "^4.0 | ^5.0 | ^6.0 | ^7.0 | ^8.0",
-        "symfony/options-resolver": "^4.0 | ^5.0 | ^6.0 | ^7.0 | ^8.0"
+        "symfony/config": "^5.0 | ^6.0 | ^7.0 | ^8.0",
+        "symfony/dependency-injection": "^5.0 | ^6.0 | ^7.0 | ^8.0",
+        "symfony/event-dispatcher": "^5.0 | ^6.0 | ^7.0 | ^8.0",
+        "symfony/http-kernel": "^5.0 | ^6.0 | ^7.0 | ^8.0",
+        "symfony/options-resolver": "^5.0 | ^6.0 | ^7.0 | ^8.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.95.0",
