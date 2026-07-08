@@ -15,6 +15,7 @@ class InterPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
         return InterPos::class === $gatewayClass;
     }
 
+    /** @return array<string, string> */
     protected function getRequiredExtensions(): array
     {
         return [];
@@ -36,6 +37,7 @@ class InterPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
         });
     }
 
+    /** @return list<string> */
     protected function getRequiredEndpoints(): array
     {
         return \array_merge(parent::getRequiredEndpoints(), ['gateway_3d']);

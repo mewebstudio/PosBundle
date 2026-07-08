@@ -16,6 +16,7 @@ class PosNetPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
         return \in_array($gatewayClass, [PosNetPos::class, PosNetV1Pos::class], true);
     }
 
+    /** @return array<string, string> */
     protected function getRequiredExtensions(): array
     {
         return [];
@@ -37,6 +38,7 @@ class PosNetPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
         });
     }
 
+    /** @return list<string> */
     protected function getRequiredEndpoints(): array
     {
         return \array_merge(parent::getRequiredEndpoints(), ['gateway_3d']);

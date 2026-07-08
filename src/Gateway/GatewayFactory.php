@@ -11,6 +11,15 @@ use Psr\Log\LoggerInterface;
 
 class GatewayFactory
 {
+    /**
+     * @param non-empty-string $name
+     * @param array{
+     *     gateway_class: class-string<PosInterface>,
+     *     credentials: array<non-empty-string, non-empty-string>,
+     *     gateway_endpoints: array{payment_api: non-empty-string, query_api?: non-empty-string},
+     *     gateway_configs?: array{lang?: 'en'|'tr', test_mode?: bool, disable_3d_hash_check?: bool}
+     * } $options
+     */
     public static function createPosGateway(
         string                   $name,
         array                    $options,

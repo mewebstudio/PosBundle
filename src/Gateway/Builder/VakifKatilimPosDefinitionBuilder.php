@@ -15,6 +15,7 @@ class VakifKatilimPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
         return VakifKatilimPos::class === $gatewayClass;
     }
 
+    /** @return array<string, string> */
     protected function getRequiredExtensions(): array
     {
         return [];

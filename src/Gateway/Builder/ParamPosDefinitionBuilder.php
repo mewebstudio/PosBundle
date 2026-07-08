@@ -15,6 +15,7 @@ class ParamPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
         return ParamPos::class === $gatewayClass;
     }
 
+    /** @return array<string, string> */
     protected function getRequiredExtensions(): array
     {
         return [];

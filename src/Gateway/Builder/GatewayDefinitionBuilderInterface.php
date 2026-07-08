@@ -15,6 +15,8 @@ interface GatewayDefinitionBuilderInterface
 
     /**
      * Create the definition for this gateway's builder given an array of options.
+     *
+     * @param array<string, mixed> $options
      */
     public function createDefinition(string $name, array $options): Definition;
 }

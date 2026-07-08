@@ -9,6 +9,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class AbstractGatewayDefinitionBuilder implements GatewayDefinitionBuilderInterface
 {
+    /**
+     * @param array<string, mixed> $options
+     */
     final public function createDefinition(string $name, array $options): Definition
     {
         $this->ensureRequiredExtensionsAvailable($name);
@@ -23,6 +26,7 @@ abstract class AbstractGatewayDefinitionBuilder implements GatewayDefinitionBuil
         return $definition;
     }
 
+    /** @return array<string, string> */
     abstract protected function getRequiredExtensions(): array;
 
     protected function configureOptions(OptionsResolver $resolver): void
@@ -61,11 +65,13 @@ abstract class AbstractGatewayDefinitionBuilder implements GatewayDefinitionBuil
         });
     }
 
+    /** @return list<string> */
     protected function getRequiredEndpoints(): array
     {
         return ['payment_api'];
     }
 
+    /** @return list<string> */
     protected function getOptionalEndpoints(): array
     {
         return ['gateway_3d_host'];

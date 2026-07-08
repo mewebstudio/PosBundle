@@ -12,6 +12,7 @@ class Param3DHostPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
         return Param3DHostPos::class === $gatewayClass;
     }
 
+    /** @return array<string, string> */
     protected function getRequiredExtensions(): array
     {
         return [];
@@ -35,11 +36,13 @@ class Param3DHostPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
         });
     }
 
+    /** @return list<string> */
     protected function getRequiredEndpoints(): array
     {
         return \array_merge(parent::getRequiredEndpoints(), ['gateway_3d_host']);
     }
 
+    /** @return list<string> */
     protected function getOptionalEndpoints(): array
     {
         return [];

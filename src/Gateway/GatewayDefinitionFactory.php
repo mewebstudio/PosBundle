@@ -33,6 +33,9 @@ class GatewayDefinitionFactory
         ];
     }
 
+    /**
+     * @param array<string, mixed> $options
+     */
     public function createDefinition(string $name, array $options): Definition
     {
         foreach ($this->builders as $builder) {

@@ -18,6 +18,7 @@ class MewsPosExtension extends Extension
     {
         $definitionFactory = new GatewayDefinitionFactory();
 
+        /** @var \Symfony\Component\Config\Definition\ConfigurationInterface $configuration */
         $configuration = $this->getConfiguration($configs, $container);
         $config        = $this->processConfiguration($configuration, $configs);
 
@@ -41,6 +42,9 @@ class MewsPosExtension extends Extension
         }
     }
 
+    /**
+     * @param array<string, mixed> $bankConfigs
+     */
     private function registerGateway(GatewayDefinitionFactory $definitionFactory, ContainerBuilder $container, string $bank, array $bankConfigs): string
     {
         $gatewayDefinition = $definitionFactory->createDefinition($bank, $bankConfigs);
@@ -66,6 +70,9 @@ class MewsPosExtension extends Extension
         return $serviceId;
     }
 
+    /**
+     * @param array<string, mixed> $bankConfigs
+     */
     private function registerGatewayQuery(ContainerBuilder $container, string $bank, array $bankConfigs): ?string
     {
         if (null === MewsPosPosQueryFactory::getPosQueryClassForGateway($bankConfigs['gateway_class'])) {

@@ -13,6 +13,7 @@ class PayForPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
         return PayForPos::class === $gatewayClass;
     }
 
+    /** @return array<string, string> */
     protected function getRequiredExtensions(): array
     {
         return [];
@@ -38,6 +39,7 @@ class PayForPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
         });
     }
 
+    /** @return list<string> */
     protected function getRequiredEndpoints(): array
     {
         return \array_merge(parent::getRequiredEndpoints(), ['gateway_3d']);

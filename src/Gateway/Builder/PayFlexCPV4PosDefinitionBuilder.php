@@ -15,6 +15,7 @@ class PayFlexCPV4PosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
         return PayFlexCPV4Pos::class === $gatewayClass;
     }
 
+    /** @return array<string, string> */
     protected function getRequiredExtensions(): array
     {
         return [];

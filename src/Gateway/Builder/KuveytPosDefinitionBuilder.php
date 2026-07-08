@@ -12,6 +12,7 @@ class KuveytPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
         return KuveytPos::class === $gatewayClass;
     }
 
+    /** @return array<string, string> */
     protected function getRequiredExtensions(): array
     {
         return [];
@@ -36,6 +37,7 @@ class KuveytPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
         });
     }
 
+    /** @return list<string> */
     protected function getRequiredEndpoints(): array
     {
         return \array_merge(parent::getRequiredEndpoints(), ['query_api']);

@@ -26,7 +26,8 @@
         }
     ],
     "scripts": {
-        "test": "./vendor/bin/simple-phpunit"
+        "test": "./vendor/bin/simple-phpunit",
+        "phpstan": "php -d memory_limit=256M ./vendor/bin/phpstan"
     },
     "require": {
         "php": ">=8.0",
@@ -40,6 +41,9 @@
     },
     "require-dev": {
         "nyholm/psr7": "^1.8",
+        "phpstan/phpstan": "2.2.x-dev",
+        "phpstan/phpstan-strict-rules": "2.0.x-dev",
+        "phpstan/phpstan-symfony": "2.0.x-dev",
         "psr/http-client": "^1.0",
         "symfony/framework-bundle": "^8.0",
         "symfony/http-client": "^8.0",

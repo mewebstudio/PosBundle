@@ -15,6 +15,7 @@ class PayFlexV4PosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
         return PayFlexV4Pos::class === $gatewayClass;
     }
 
+    /** @return array<string, string> */
     protected function getRequiredExtensions(): array
     {
         return [];
@@ -38,6 +39,7 @@ class PayFlexV4PosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
         });
     }
 
+    /** @return list<string> */
     protected function getRequiredEndpoints(): array
     {
         return \array_merge(parent::getRequiredEndpoints(), ['gateway_3d', 'query_api']);

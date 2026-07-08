@@ -15,6 +15,7 @@ class ToslaPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
         return ToslaPos::class === $gatewayClass;
     }
 
+    /** @return array<string, string> */
     protected function getRequiredExtensions(): array
     {
         return [];
@@ -37,6 +38,7 @@ class ToslaPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
         });
     }
 
+    /** @return list<string> */
     protected function getRequiredEndpoints(): array
     {
         return \array_merge(parent::getRequiredEndpoints(), ['gateway_3d']);

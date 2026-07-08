@@ -4,6 +4,7 @@ namespace Mews\PosBundle\Gateway;
 
 use Mews\Pos\Factory\AccountFactory as MewsPosAccountFactory;
 use Mews\Pos\Factory\PosQueryFactory as MewsPosPosQueryFactory;
+use Mews\Pos\PosInterface;
 use Mews\Pos\PosQuery\PosQueryInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Client\ClientInterface;
@@ -11,6 +12,15 @@ use Psr\Log\LoggerInterface;
 
 class PosQueryFactory
 {
+    /**
+     * @param non-empty-string $name
+     * @param array{
+     *     gateway_class: class-string<PosInterface>,
+     *     credentials: array<non-empty-string, non-empty-string>,
+     *     gateway_endpoints: array<'payment_api'|'query_api'|'gateway_3d', non-empty-string>,
+     *     gateway_configs?: array{lang?: 'en'|'tr', test_mode?: bool, disable_3d_hash_check?: bool}
+     * } $options
+     */
     public static function createPosQuery(
         string                   $name,
         array                    $options,
