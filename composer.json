@@ -26,7 +26,7 @@
         }
     ],
     "scripts": {
-        "test": "./vendor/bin/simple-phpunit",
+        "test": "./vendor/bin/phpunit",
         "phpstan": "php -d memory_limit=256M ./vendor/bin/phpstan",
         "cs-fix": "./vendor/bin/php-cs-fixer fix",
         "cs-check": "./vendor/bin/php-cs-fixer fix --dry-run --diff"
@@ -51,7 +51,7 @@
         "symfony/framework-bundle": "^8.0",
         "symfony/http-client": "^8.0",
         "symfony/monolog-bundle": "^3.1",
-        "symfony/phpunit-bridge": "^5.4 | ^6.4 | ^7.4 | ^8.0",
+        "phpunit/phpunit": "^10.0",
         "symfony/yaml": "^8.0"
     },
     "autoload": {
