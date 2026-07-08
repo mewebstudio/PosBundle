@@ -15,7 +15,11 @@ class AbstractGatewayDefinitionBuilderTest extends TestCase
     public function testThrowsMissingExtensionExceptionWhenExtensionNotLoaded(): void
     {
         $builder = new class extends AbstractGatewayDefinitionBuilder {
-            public function supports(string $gatewayClass): bool { return true; }
+            public function supports(string $gatewayClass): bool
+            {
+                return true;
+            }
+
             protected function getRequiredExtensions(): array
             {
                 return ['this_extension_does_not_exist' => 'ext-nonexistent'];
@@ -26,15 +30,15 @@ class AbstractGatewayDefinitionBuilderTest extends TestCase
         $this->expectExceptionMessage('ext-nonexistent');
 
         $builder->createDefinition('test', [
-            'gateway_class'     => AssecoPos::class,
-            'credentials'       => [
-                'merchant_id'   => '123',
-                'user_name'     => 'user',
+            'gateway_class' => AssecoPos::class,
+            'credentials' => [
+                'merchant_id' => '123',
+                'user_name' => 'user',
                 'user_password' => 'pass',
             ],
             'gateway_endpoints' => [
                 'payment_api' => 'https://api.example.com',
-                'gateway_3d'  => 'https://3d.example.com',
+                'gateway_3d' => 'https://3d.example.com',
             ],
         ]);
     }

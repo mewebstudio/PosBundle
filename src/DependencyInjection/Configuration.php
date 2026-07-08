@@ -11,7 +11,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('mews_pos');
-        $rootNode    = $treeBuilder->getRootNode();
+        $rootNode = $treeBuilder->getRootNode();
 
         $rootNode
             ->children()
@@ -39,9 +39,9 @@ class Configuration implements ConfigurationInterface
                                 ->scalarNode('secret_key')
                                     ->info("AssecoPos|GarantiPos: StoreKey;\nPosNetPos: EncKey;\nPayForPos|InterPos: MerchantPass;\nKuveytPos|VakifKatilimPos: StoreKey;\nAkbankPos: SecretKey;\nToslaPos: ApiPass;\nParamPos|Param3DHostPos: GUID;\nIyzicoPos: SecretKey;\nPayTrPos: MerchantKey;")
                                 ->end()
-                                ->scalarNode('refund_user_name')->info("GarantiPos: ProvUserID;")->end()
-                                ->scalarNode('refund_user_password')->info("GarantiPos: ProvisionPassword")->end()
-                                ->scalarNode('mbr_id')->info("PayForPos: MbrId")->end()
+                                ->scalarNode('refund_user_name')->info('GarantiPos: ProvUserID;')->end()
+                                ->scalarNode('refund_user_password')->info('GarantiPos: ProvisionPassword')->end()
+                                ->scalarNode('mbr_id')->info('PayForPos: MbrId')->end()
                             ->end()
                         ->end()
                         ->arrayNode('gateway_endpoints')->isRequired()

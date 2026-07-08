@@ -23,16 +23,16 @@ class AssecoPosDefinitionBuilderTest extends TestCase
     private function validOptions(): array
     {
         return [
-            'gateway_class'     => AssecoPos::class,
-            'credentials'       => [
-                'merchant_id'   => 'merchant',
-                'user_name'     => 'user',
+            'gateway_class' => AssecoPos::class,
+            'credentials' => [
+                'merchant_id' => 'merchant',
+                'user_name' => 'user',
                 'user_password' => 'pass',
-                'secret_key'    => 'key',
+                'secret_key' => 'key',
             ],
             'gateway_endpoints' => [
                 'payment_api' => 'https://api.example.com',
-                'gateway_3d'  => 'https://3d.example.com',
+                'gateway_3d' => 'https://3d.example.com',
             ],
         ];
     }

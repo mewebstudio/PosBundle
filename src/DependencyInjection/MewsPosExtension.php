@@ -20,16 +20,15 @@ class MewsPosExtension extends Extension
 
         /** @var \Symfony\Component\Config\Definition\ConfigurationInterface $configuration */
         $configuration = $this->getConfiguration($configs, $container);
-        $config        = $this->processConfiguration($configuration, $configs);
+        $config = $this->processConfiguration($configuration, $configs);
 
         $i = 0;
         // Create gateway definition
         foreach ($config['banks'] as $bank => $bankConfigs) {
-
             $serviceId = $this->registerGateway($definitionFactory, $container, $bank, $bankConfigs);
             $queryServiceId = $this->registerGatewayQuery($container, $bank, $bankConfigs);
 
-            if ($i === 0) {
+            if (0 === $i) {
                 // set the first gateway as a default for injection
                 $container->setAlias(PosInterface::class, $serviceId)
                     ->setPublic(false);
@@ -37,7 +36,7 @@ class MewsPosExtension extends Extension
                     $container->setAlias(PosQueryInterface::class, $queryServiceId)
                         ->setPublic(false);
                 }
-                $i++;
+                ++$i;
             }
         }
     }
@@ -48,17 +47,17 @@ class MewsPosExtension extends Extension
     private function registerGateway(GatewayDefinitionFactory $definitionFactory, ContainerBuilder $container, string $bank, array $bankConfigs): string
     {
         $gatewayDefinition = $definitionFactory->createDefinition($bank, $bankConfigs);
-        $serviceId = 'mews_pos.gateway.'.$bank;
+        $serviceId = 'mews_pos.gateway.' . $bank;
 
         $container->setDefinition($serviceId, $gatewayDefinition)
             ->setClass(PosInterface::class)
             ->setFactory([GatewayFactory::class, 'createPosGateway'])
             ->setArguments([
-                '$name'            => $bank,
-                '$options'         => $bankConfigs,
+                '$name' => $bank,
+                '$options' => $bankConfigs,
                 '$eventDispatcher' => new Reference('event_dispatcher'),
-                '$logger'          => new Reference('logger'),
-                '$client'          => new Reference('psr18.http_client'),
+                '$logger' => new Reference('logger'),
+                '$client' => new Reference('psr18.http_client'),
             ])
             ->setPublic(false);
 

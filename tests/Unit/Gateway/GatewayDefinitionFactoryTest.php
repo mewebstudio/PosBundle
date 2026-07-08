@@ -31,18 +31,18 @@ class GatewayDefinitionFactoryTest extends TestCase
     public function testCreateDefinitionReturnsDefinitionForKnownGatewayClass(): void
     {
         $definition = $this->factory->createDefinition('asseco', [
-            'gateway_class'     => AssecoPos::class,
-            'credentials'       => [
-                'merchant_id'   => '700XXX',
-                'user_name'     => 'user',
+            'gateway_class' => AssecoPos::class,
+            'credentials' => [
+                'merchant_id' => '700XXX',
+                'user_name' => 'user',
                 'user_password' => 'pass',
-                'secret_key'    => 'key',
+                'secret_key' => 'key',
             ],
             'gateway_endpoints' => [
                 'payment_api' => 'https://example.com/api',
-                'gateway_3d'  => 'https://example.com/3d',
+                'gateway_3d' => 'https://example.com/3d',
             ],
-            'gateway_configs'   => [],
+            'gateway_configs' => [],
         ]);
 
         $this->assertNotNull($definition);

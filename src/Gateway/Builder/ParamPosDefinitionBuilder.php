@@ -7,9 +7,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ParamPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
 {
-    /**
-     * @inheritDoc
-     */
     public function supports(string $gatewayClass): bool
     {
         return ParamPos::class === $gatewayClass;

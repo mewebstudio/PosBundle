@@ -7,9 +7,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ToslaPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
 {
-    /**
-     * @inheritDoc
-     */
     public function supports(string $gatewayClass): bool
     {
         return ToslaPos::class === $gatewayClass;

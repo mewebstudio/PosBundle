@@ -17,15 +17,15 @@ class GatewayFactory
      *     gateway_class: class-string<PosInterface>,
      *     credentials: array<non-empty-string, non-empty-string>,
      *     gateway_endpoints: array{payment_api: non-empty-string, query_api?: non-empty-string},
-     *     gateway_configs?: array{lang?: 'en'|'tr', test_mode?: bool, disable_3d_hash_check?: bool}
+     *     gateway_configs?: array{lang?: PosInterface::LANG_*, test_mode?: bool, disable_3d_hash_check?: bool}
      * } $options
      */
     public static function createPosGateway(
-        string                   $name,
-        array                    $options,
+        string $name,
+        array $options,
         EventDispatcherInterface $eventDispatcher,
-        LoggerInterface          $logger,
-        ClientInterface          $client
+        LoggerInterface $logger,
+        ClientInterface $client
     ): PosInterface {
         $account = MewsPosAccountFactory::createForGateway(
             $options['gateway_class'],
@@ -34,9 +34,9 @@ class GatewayFactory
         );
 
         $config = [
-            'class'             => $options['gateway_class'],
+            'class' => $options['gateway_class'],
             'gateway_endpoints' => $options['gateway_endpoints'],
-            'gateway_configs'   => $options['gateway_configs'] ?? [],
+            'gateway_configs' => $options['gateway_configs'] ?? [],
         ];
 
         return PosFactory::create(

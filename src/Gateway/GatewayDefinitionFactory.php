@@ -44,8 +44,6 @@ class GatewayDefinitionFactory
             }
         }
 
-        throw new \InvalidArgumentException(
-            \sprintf('No builder found for gateway class "%s" (bank: "%s").', $options['gateway_class'], $name)
-        );
+        throw new \InvalidArgumentException(\sprintf('No builder found for gateway class "%s" (bank: "%s").', $options['gateway_class'], $name));
     }
 }

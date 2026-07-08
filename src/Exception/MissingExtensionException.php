@@ -3,7 +3,7 @@
 namespace Mews\PosBundle\Exception;
 
 /**
- * thrown if a PHP extension is missing that is required by the gateway
+ * thrown if a PHP extension is missing that is required by the gateway.
  */
 class MissingExtensionException extends \RuntimeException
 {

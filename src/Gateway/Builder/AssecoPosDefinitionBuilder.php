@@ -7,9 +7,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class AssecoPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
 {
-    /**
-     * @inheritDoc
-     */
     public function supports(string $gatewayClass): bool
     {
         return AssecoPos::class === $gatewayClass;

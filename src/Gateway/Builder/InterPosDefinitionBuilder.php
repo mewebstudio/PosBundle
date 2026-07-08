@@ -7,9 +7,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class InterPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
 {
-    /**
-     * @inheritDoc
-     */
     public function supports(string $gatewayClass): bool
     {
         return InterPos::class === $gatewayClass;

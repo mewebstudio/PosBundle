@@ -7,9 +7,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PayFlexV4PosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
 {
-    /**
-     * @inheritDoc
-     */
     public function supports(string $gatewayClass): bool
     {
         return PayFlexV4Pos::class === $gatewayClass;

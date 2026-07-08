@@ -20,10 +20,10 @@ class GatewayFactoryTest extends TestCase
         GatewayFactory::createPosGateway(
             'test',
             [
-                'gateway_class'     => \stdClass::class,
-                'credentials'       => [],
+                'gateway_class' => \stdClass::class,
+                'credentials' => [],
                 'gateway_endpoints' => [],
-                'gateway_configs'   => [],
+                'gateway_configs' => [],
             ],
             $this->createMock(EventDispatcherInterface::class),
             $this->createMock(LoggerInterface::class),

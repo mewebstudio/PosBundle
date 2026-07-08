@@ -8,8 +8,6 @@ interface GatewayDefinitionBuilderInterface
 {
     /**
      * @param class-string $gatewayClass
-     *
-     * @return bool
      */
     public function supports(string $gatewayClass): bool;
 

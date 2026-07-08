@@ -103,11 +103,6 @@ abstract class AbstractGatewayDefinitionBuilder implements GatewayDefinitionBuil
             return;
         }
 
-        throw new MissingExtensionException(\sprintf(
-            "Missing PHP extension%s, to use the \"%s\" adapter, please install %s",
-            \count($missingExtensions) > 1 ? 's' : '',
-            $name,
-            \implode(' ', $missingExtensions)
-        ));
+        throw new MissingExtensionException(\sprintf('Missing PHP extension%s, to use the "%s" adapter, please install %s', \count($missingExtensions) > 1 ? 's' : '', $name, \implode(' ', $missingExtensions)));
     }
 }
