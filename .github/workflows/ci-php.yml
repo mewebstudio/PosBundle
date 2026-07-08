@@ -5,6 +5,50 @@ on:
   pull_request:
 
 jobs:
+  code-style:
+    runs-on: ubuntu-latest
+    name: Code Style (PHP CS Fixer)
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+
+      - name: Configure Composer
+        run: composer config --global policy.advisories.block false
+
+      - name: Install dependencies
+        run: composer update --no-interaction --prefer-dist
+
+      - name: Check code style
+        run: composer cs-check
+
+  phpstan:
+    runs-on: ubuntu-latest
+    name: PHPStan (level 8)
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+
+      - name: Configure Composer
+        run: composer config --global policy.advisories.block false
+
+      - name: Install dependencies
+        run: composer update --no-interaction --prefer-dist
+
+      - name: Run PHPStan
+        run: composer phpstan
+
   test:
     runs-on: ubuntu-latest
     strategy:
