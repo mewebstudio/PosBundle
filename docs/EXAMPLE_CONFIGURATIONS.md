@@ -11,8 +11,8 @@ Parametrelerin açıklamalarında hangi gateway'de neye karşılık geldiğini y
 
 Örneğin bu parametre açıklamasına göre:
 ```yaml
-                # InterPos: ShopCode;
-                merchant_id: ~
+    # InterPos: ShopCode;
+    merchant_id: ~
 ```
 `InterPos`'da **ShopCode** değeri için `merchant_id` alanı kullanmamız gerekiyor.
 

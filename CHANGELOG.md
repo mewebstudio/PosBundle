@@ -1,6 +1,6 @@
 # Değişiklik Geçmişi
 
-## [2.0.0] - 2026-07-??
+## [2.0.0] - 2026-07-15
 
 ### Kırıcı Değişiklikler
 - **Symfony v4 desteği kaldırıldı;** minimum desteklenen Symfony sürümü v5.4'tür
