@@ -9,6 +9,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class AbstractGatewayDefinitionBuilder implements GatewayDefinitionBuilderInterface
 {
+    /**
+     * @param array<string, mixed> $options
+     */
     final public function createDefinition(string $name, array $options): Definition
     {
         $this->ensureRequiredExtensionsAvailable($name);
@@ -23,20 +26,11 @@ abstract class AbstractGatewayDefinitionBuilder implements GatewayDefinitionBuil
         return $definition;
     }
 
+    /** @return array<string, string> */
     abstract protected function getRequiredExtensions(): array;
 
     protected function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
-            'lang'      => PosInterface::LANG_TR,
-            'test_mode' => false,
-        ]);
-        $resolver->setAllowedValues('lang', [
-            PosInterface::LANG_TR,
-            PosInterface::LANG_EN,
-        ]);
-        $resolver->setAllowedTypes('test_mode', 'boolean');
-
         $resolver
             ->setRequired('gateway_class')
             ->setAllowedTypes('gateway_class', 'string');
@@ -57,18 +51,8 @@ abstract class AbstractGatewayDefinitionBuilder implements GatewayDefinitionBuil
         $this->setNestedOptions($resolver, 'credentials', function (OptionsResolver $subResolver): void {
             $subResolver->setRequired([
                 'merchant_id',
-                'payment_model',
-                'enc_key', // for 3D models only
             ]);
             $subResolver->setAllowedTypes('merchant_id', ['int', 'string']);
-            $subResolver->setAllowedTypes('enc_key', ['int', 'string']);
-            $subResolver->setAllowedValues('payment_model', [
-                PosInterface::MODEL_NON_SECURE,
-                PosInterface::MODEL_3D_SECURE,
-                PosInterface::MODEL_3D_PAY,
-                PosInterface::MODEL_3D_PAY_HOSTING,
-                PosInterface::MODEL_3D_HOST,
-            ]);
         });
 
         $this->setNestedOptions($resolver, 'gateway_configs', function (OptionsResolver $subResolver): void {
@@ -76,14 +60,18 @@ abstract class AbstractGatewayDefinitionBuilder implements GatewayDefinitionBuil
                 ->setAllowedTypes('test_mode', 'boolean');
             $subResolver->setDefault('disable_3d_hash_check', false)
                 ->setAllowedTypes('disable_3d_hash_check', 'boolean');
+            $subResolver->setDefault('lang', PosInterface::LANG_TR)
+                ->setAllowedValues('lang', [PosInterface::LANG_TR, PosInterface::LANG_EN]);
         });
     }
 
+    /** @return list<string> */
     protected function getRequiredEndpoints(): array
     {
         return ['payment_api'];
     }
 
+    /** @return list<string> */
     protected function getOptionalEndpoints(): array
     {
         return ['gateway_3d_host'];
@@ -115,11 +103,6 @@ abstract class AbstractGatewayDefinitionBuilder implements GatewayDefinitionBuil
             return;
         }
 
-        throw new MissingExtensionException(\sprintf(
-            "Missing PHP extension%s, to use the \"%s\" adapter, please install %s",
-            \count($missingExtensions) > 1 ? 's' : '',
-            $name,
-            \implode(' ', $missingExtensions)
-        ));
+        throw new MissingExtensionException(\sprintf('Missing PHP extension%s, to use the "%s" adapter, please install %s', \count($missingExtensions) > 1 ? 's' : '', $name, \implode(' ', $missingExtensions)));
     }
 }

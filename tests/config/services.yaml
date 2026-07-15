@@ -3,8 +3,8 @@ services:
     public: true
 
   # making services public by adding alias for it.
-  test.mews_pos.gateway.estpos:
-    alias: mews_pos.gateway.estpos
+  test.mews_pos.gateway.asseco:
+    alias: mews_pos.gateway.asseco
   test.mews_pos.gateway.yapikredi:
     alias: mews_pos.gateway.yapikredi
 
@@ -43,3 +43,57 @@ services:
 
   test.mews_pos.gateway.parampos:
     alias: mews_pos.gateway.parampos
+
+  test.mews_pos.gateway.param3dhostpos:
+    alias: mews_pos.gateway.param3dhostpos
+
+  test.mews_pos.gateway.iyzicopos:
+    alias: mews_pos.gateway.iyzicopos
+
+  test.mews_pos.gateway.paytrpos:
+    alias: mews_pos.gateway.paytrpos
+
+  test.mews_pos.query.asseco:
+    alias: mews_pos.query.asseco
+
+  test.mews_pos.query.yapikredi:
+    alias: mews_pos.query.yapikredi
+
+  test.mews_pos.query.albaraka:
+    alias: mews_pos.query.albaraka
+
+  test.mews_pos.query.payfor_finansbank:
+    alias: mews_pos.query.payfor_finansbank
+
+  test.mews_pos.query.payfor_ziraat_katilim:
+    alias: mews_pos.query.payfor_ziraat_katilim
+
+  test.mews_pos.query.garanti:
+    alias: mews_pos.query.garanti
+
+  test.mews_pos.query.interpos_denizbank:
+    alias: mews_pos.query.interpos_denizbank
+
+  test.mews_pos.query.vakifkatilim:
+    alias: mews_pos.query.vakifkatilim
+
+  test.mews_pos.query.payflexv4_ziraat:
+    alias: mews_pos.query.payflexv4_ziraat
+
+  test.mews_pos.query.payflexcpv4_vakifbank:
+    alias: mews_pos.query.payflexcpv4_vakifbank
+
+  test.mews_pos.query.akbankpos:
+    alias: mews_pos.query.akbankpos
+
+  test.mews_pos.query.toslapos:
+    alias: mews_pos.query.toslapos
+
+  test.mews_pos.query.parampos:
+    alias: mews_pos.query.parampos
+
+  test.mews_pos.query.iyzicopos:
+    alias: mews_pos.query.iyzicopos
+
+  test.mews_pos.query.paytrpos:
+    alias: mews_pos.query.paytrpos

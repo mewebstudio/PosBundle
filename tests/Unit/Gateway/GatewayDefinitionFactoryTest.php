@@ -2,7 +2,7 @@
 
 namespace Mews\PosBundle\Tests\Unit\Gateway;
 
-use Mews\Pos\Gateways\EstV3Pos;
+use Mews\Pos\Gateway\AssecoPos;
 use Mews\PosBundle\Gateway\GatewayDefinitionFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -30,22 +30,19 @@ class GatewayDefinitionFactoryTest extends TestCase
 
     public function testCreateDefinitionReturnsDefinitionForKnownGatewayClass(): void
     {
-        $definition = $this->factory->createDefinition('estpos', [
-            'gateway_class'      => EstV3Pos::class,
-            'lang'               => 'tr',
-            'test_mode'          => false,
-            'credentials'        => [
-                'payment_model' => 'regular',
-                'merchant_id'   => '700XXX',
-                'user_name'     => 'user',
+        $definition = $this->factory->createDefinition('asseco', [
+            'gateway_class' => AssecoPos::class,
+            'credentials' => [
+                'merchant_id' => '700XXX',
+                'user_name' => 'user',
                 'user_password' => 'pass',
-                'enc_key'       => 'key',
+                'secret_key' => 'key',
             ],
-            'gateway_endpoints'  => [
+            'gateway_endpoints' => [
                 'payment_api' => 'https://example.com/api',
-                'gateway_3d'  => 'https://example.com/3d',
+                'gateway_3d' => 'https://example.com/3d',
             ],
-            'gateway_configs'    => [],
+            'gateway_configs' => [],
         ]);
 
         $this->assertNotNull($definition);

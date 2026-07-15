@@ -2,19 +2,17 @@
 
 namespace Mews\PosBundle\Gateway\Builder;
 
-use Mews\Pos\Gateways\GarantiPos;
+use Mews\Pos\Gateway\GarantiPos;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class GarantiPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
 {
-    /**
-     * @inheritDoc
-     */
     public function supports(string $gatewayClass): bool
     {
-        return \in_array($gatewayClass, [GarantiPos::class], true);
+        return GarantiPos::class === $gatewayClass;
     }
 
+    /** @return array<string, string> */
     protected function getRequiredExtensions(): array
     {
         return [];
@@ -34,6 +32,8 @@ class GarantiPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
             $subResolver->setAllowedTypes('user_password', ['int', 'string']);
             $subResolver->setAllowedTypes('terminal_id', ['int', 'string']);
 
+            $subResolver->setDefined('secret_key')
+                ->setAllowedTypes('secret_key', ['int', 'string']);
             $subResolver->setDefined([
                 'refund_user_name',
                 'refund_user_password',
@@ -41,9 +41,9 @@ class GarantiPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
             $subResolver->setAllowedTypes('refund_user_name', ['int', 'string']);
             $subResolver->setAllowedTypes('refund_user_password', ['int', 'string']);
         });
-
     }
 
+    /** @return list<string> */
     protected function getRequiredEndpoints(): array
     {
         return \array_merge(parent::getRequiredEndpoints(), ['gateway_3d']);

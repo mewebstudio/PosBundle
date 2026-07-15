@@ -2,14 +2,14 @@
 
 namespace Mews\PosBundle\Gateway\Builder;
 
-use Mews\Pos\Gateway\InterPos;
+use Mews\Pos\Gateway\IyzicoPos;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class InterPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
+class IyzicoPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
 {
     public function supports(string $gatewayClass): bool
     {
-        return InterPos::class === $gatewayClass;
+        return IyzicoPos::class === $gatewayClass;
     }
 
     /** @return array<string, string> */
@@ -23,20 +23,18 @@ class InterPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
         parent::configureOptions($resolver);
 
         $this->setNestedOptions($resolver, 'credentials', function (OptionsResolver $subResolver): void {
-            $subResolver->setRequired([
-                'user_name',
-                'user_password',
-            ]);
-            $subResolver->setAllowedTypes('user_name', ['int', 'string']);
-            $subResolver->setAllowedTypes('user_password', ['int', 'string']);
-            $subResolver->setDefined('secret_key')
-                ->setAllowedTypes('secret_key', ['int', 'string']);
+            $subResolver
+                ->setRequired('secret_key')
+                ->setAllowedTypes('secret_key', ['string']);
+            $subResolver
+                ->setDefined('sub_merchant_id')
+                ->setAllowedTypes('sub_merchant_id', ['string']);
         });
     }
 
     /** @return list<string> */
     protected function getRequiredEndpoints(): array
     {
-        return \array_merge(parent::getRequiredEndpoints(), ['gateway_3d']);
+        return \array_merge(parent::getRequiredEndpoints(), ['query_api']);
     }
 }

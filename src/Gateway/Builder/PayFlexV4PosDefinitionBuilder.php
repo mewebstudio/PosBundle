@@ -2,19 +2,17 @@
 
 namespace Mews\PosBundle\Gateway\Builder;
 
-use Mews\Pos\Gateways\PayFlexV4Pos;
+use Mews\Pos\Gateway\PayFlexV4Pos;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PayFlexV4PosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
 {
-    /**
-     * @inheritDoc
-     */
     public function supports(string $gatewayClass): bool
     {
         return PayFlexV4Pos::class === $gatewayClass;
     }
 
+    /** @return array<string, string> */
     protected function getRequiredExtensions(): array
     {
         return [];
@@ -35,12 +33,10 @@ class PayFlexV4PosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
             $subResolver
                 ->setDefined('sub_merchant_id')
                 ->setAllowedTypes('sub_merchant_id', ['string']);
-
-            // enc_key is not used, we set it to empty string by default.
-            $subResolver->setDefault('enc_key', '');
         });
     }
 
+    /** @return list<string> */
     protected function getRequiredEndpoints(): array
     {
         return \array_merge(parent::getRequiredEndpoints(), ['gateway_3d', 'query_api']);

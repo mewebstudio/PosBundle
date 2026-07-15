@@ -3,30 +3,31 @@
 namespace Mews\PosBundle\Gateway;
 
 use Mews\Pos\Factory\AccountFactory as MewsPosAccountFactory;
-use Mews\Pos\Factory\PosFactory;
+use Mews\Pos\Factory\PosQueryFactory as MewsPosPosQueryFactory;
 use Mews\Pos\PosInterface;
+use Mews\Pos\PosQuery\PosQueryInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Log\LoggerInterface;
 
-class GatewayFactory
+class PosQueryFactory
 {
     /**
      * @param non-empty-string $name
      * @param array{
      *     gateway_class: class-string<PosInterface>,
      *     credentials: array<non-empty-string, non-empty-string>,
-     *     gateway_endpoints: array{payment_api: non-empty-string, query_api?: non-empty-string},
+     *     gateway_endpoints: array<'payment_api'|'query_api'|'gateway_3d', non-empty-string>,
      *     gateway_configs?: array{lang?: PosInterface::LANG_*, test_mode?: bool, disable_3d_hash_check?: bool}
      * } $options
      */
-    public static function createPosGateway(
+    public static function createPosQuery(
         string $name,
         array $options,
         EventDispatcherInterface $eventDispatcher,
         LoggerInterface $logger,
         ClientInterface $client
-    ): PosInterface {
+    ): PosQueryInterface {
         $account = MewsPosAccountFactory::createForGateway(
             $options['gateway_class'],
             $name,
@@ -39,13 +40,6 @@ class GatewayFactory
             'gateway_configs' => $options['gateway_configs'] ?? [],
         ];
 
-        return PosFactory::create(
-            $account,
-            $config,
-            $eventDispatcher,
-            null,
-            $client,
-            $logger
-        );
+        return MewsPosPosQueryFactory::create($account, $config, $eventDispatcher, $client, $logger);
     }
 }

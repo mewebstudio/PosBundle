@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.6/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.0/phpunit.xsd"
          bootstrap="tests/bootstrap.php"
          executionOrder="depends,defects"
-         forceCoversAnnotation="true"
-         beStrictAboutCoversAnnotation="true"
          beStrictAboutOutputDuringTests="true"
-         beStrictAboutTodoAnnotatedTests="true"
-         convertDeprecationsToExceptions="false"
          failOnRisky="true"
-         cacheResultFile="./var/.phpunit.result.cache"
-         verbose="true">
+         cacheDirectory="./var/.phpunit.cache">
     <testsuites>
         <testsuite name="default">
             <directory>tests</directory>
@@ -26,7 +21,6 @@
         <env name="KERNEL_CLASS" value="Mews\PosBundle\Tests\Kernel\Kernel"/>
         <env name="APP_ENV" value="test"/>
         <env name="APP_DEBUG" value="1"/>
-        <env name="SYMFONY_DEPRECATIONS_HELPER" value="weak"/>
     </php>
 
 <!--    <coverage cacheDirectory="var/code-coverage"-->

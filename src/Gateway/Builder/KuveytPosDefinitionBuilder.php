@@ -2,19 +2,17 @@
 
 namespace Mews\PosBundle\Gateway\Builder;
 
-use Mews\Pos\Gateways\KuveytPos;
+use Mews\Pos\Gateway\KuveytPos;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class KuveytPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
 {
-    /**
-     * @inheritDoc
-     */
     public function supports(string $gatewayClass): bool
     {
-        return \in_array($gatewayClass, [KuveytPos::class], true);
+        return KuveytPos::class === $gatewayClass;
     }
 
+    /** @return array<string, string> */
     protected function getRequiredExtensions(): array
     {
         return [];
@@ -28,15 +26,20 @@ class KuveytPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
             $subResolver->setRequired([
                 'user_name',
                 'terminal_id',
+                'secret_key',
             ]);
+            $subResolver->setAllowedTypes('user_name', ['int', 'string']);
+            $subResolver->setAllowedTypes('terminal_id', ['int', 'string']);
+            $subResolver->setAllowedTypes('secret_key', ['int', 'string']);
             $subResolver
                 ->setDefined('sub_merchant_id')
                 ->setAllowedTypes('sub_merchant_id', ['int', 'string']);
         });
     }
 
+    /** @return list<string> */
     protected function getRequiredEndpoints(): array
     {
-        return \array_merge(parent::getRequiredEndpoints(), ['gateway_3d', 'query_api']);
+        return \array_merge(parent::getRequiredEndpoints(), ['query_api']);
     }
 }

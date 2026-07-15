@@ -2,20 +2,18 @@
 
 namespace Mews\PosBundle\Gateway\Builder;
 
-use Mews\Pos\Gateways\PosNet;
-use Mews\Pos\Gateways\PosNetV1Pos;
+use Mews\Pos\Gateway\PosNetPos;
+use Mews\Pos\Gateway\PosNetV1Pos;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PosNetPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
 {
-    /**
-     * @inheritDoc
-     */
     public function supports(string $gatewayClass): bool
     {
-        return \in_array($gatewayClass, [PosNet::class, PosNetV1Pos::class], true);
+        return \in_array($gatewayClass, [PosNetPos::class, PosNetV1Pos::class], true);
     }
 
+    /** @return array<string, string> */
     protected function getRequiredExtensions(): array
     {
         return [];
@@ -26,16 +24,18 @@ class PosNetPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
         parent::configureOptions($resolver);
 
         $this->setNestedOptions($resolver, 'credentials', function (OptionsResolver $subResolver): void {
-
             $subResolver->setRequired([
                 'terminal_id',
-                'user_name' // required for 3D payment models
+                'user_name',
             ]);
             $subResolver->setAllowedTypes('terminal_id', ['int', 'string']);
             $subResolver->setAllowedTypes('user_name', ['int', 'string']);
+            $subResolver->setDefined('secret_key')
+                ->setAllowedTypes('secret_key', ['int', 'string']);
         });
     }
 
+    /** @return list<string> */
     protected function getRequiredEndpoints(): array
     {
         return \array_merge(parent::getRequiredEndpoints(), ['gateway_3d']);

@@ -5,24 +5,62 @@ on:
   pull_request:
 
 jobs:
+  code-style:
+    runs-on: ubuntu-latest
+    name: Code Style (PHP CS Fixer)
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+
+      - name: Configure Composer
+        run: composer config --global policy.advisories.block false
+
+      - name: Install dependencies
+        run: composer update --no-interaction --prefer-dist
+
+      - name: Check code style
+        run: composer cs-check
+
+  phpstan:
+    runs-on: ubuntu-latest
+    name: PHPStan (level 8)
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+
+      - name: Configure Composer
+        run: composer config --global policy.advisories.block false
+
+      - name: Install dependencies
+        run: composer update --no-interaction --prefer-dist
+
+      - name: Run PHPStan
+        run: composer phpstan
+
   test:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         include:
-          - php: '7.4'
-            symfony: '^4.4'
-          - php: '7.4'
-            symfony: '^5.4'
           - php: '8.1'
             symfony: '^5.4'
           - php: '8.1'
             symfony: '^6.4'
           - php: '8.2'
             symfony: '^6.4'
-          - php: '8.2'
-            symfony: '^7.4'
           - php: '8.2'
             symfony: '^7.4'
           - php: '8.3'
@@ -57,7 +95,7 @@ jobs:
           composer update --no-interaction --prefer-dist
 
       - name: Run unit tests
-        run: vendor/bin/simple-phpunit --testsuite=unit
+        run: vendor/bin/phpunit --testsuite=unit
 
       - name: Run integration tests
-        run: vendor/bin/simple-phpunit --testsuite=integration
+        run: vendor/bin/phpunit --testsuite=integration

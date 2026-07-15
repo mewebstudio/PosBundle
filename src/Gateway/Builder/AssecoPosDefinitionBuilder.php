@@ -2,14 +2,14 @@
 
 namespace Mews\PosBundle\Gateway\Builder;
 
-use Mews\Pos\Gateway\InterPos;
+use Mews\Pos\Gateway\AssecoPos;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class InterPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
+class AssecoPosDefinitionBuilder extends AbstractGatewayDefinitionBuilder
 {
     public function supports(string $gatewayClass): bool
     {
-        return InterPos::class === $gatewayClass;
+        return AssecoPos::class === $gatewayClass;
     }
 
     /** @return array<string, string> */
